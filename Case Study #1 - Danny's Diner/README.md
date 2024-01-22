@@ -1,3 +1,7 @@
+# Case Study #1 - Danny's Diner
+
+[Image](Case Study #1 - Danny's Diner/Images/Image1.png)
+
 ## SQL Queries and Outputs
 
 ### 1. What is the total amount each customer spent at the restaurant?
