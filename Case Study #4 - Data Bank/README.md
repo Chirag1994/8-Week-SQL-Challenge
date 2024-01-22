@@ -129,7 +129,7 @@ If the annual interest rate is set at 6% and the Data Bank team wants to reward 
 
 > Data Bank wants an initial calculation which does not allow for compounding interest, however they may also be interested in a daily compounding interest calculation so you can try to perform this calculation if you have the stamina!
 
-### Extension Request
+### E. Extension Request
 
 The Data Bank team wants you to use the outputs generated from the above sections to create a quick Powerpoint presentation which will be used as marketing materials for both external investors who might want to buy Data Bank shares and new prospective customers who might want to bank with Data Bank.
 
