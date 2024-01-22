@@ -6,90 +6,132 @@
 
 - [Problem Statement](#problem-statement)
 - [Entity Relationship Diagram](#entity-relationship-diagram)
-- [SQL Queries and Outputs](#sql-queries-and-outputs)
+- [Case Study Questions](#case-study-questions)
 
 ## Problem Statement
 
 <a id="problem-statement"></a>
 
-Did you know that over 115 million kilograms of pizza is consumed daily worldwide??? (Well according to Wikipedia anyway…)
+There is a new innovation in the financial industry called Neo-Banks: new aged digital only banks without physical branches.
 
-Danny was scrolling through his Instagram feed when something really caught his eye - “80s Retro Styling and Pizza Is The Future!”
+Danny thought that there should be some sort of intersection between these new age banks, cryptocurrency and the data world…so he decides to launch a new initiative - Data Bank!
 
-Danny was sold on the idea, but he knew that pizza alone was not going to help him get seed funding to expand his new Pizza Empire - so he had one more genius idea to combine with it - he was going to Uberize it - and so Pizza Runner was launched!
+Data Bank runs just like any other digital bank - but it isn’t only for banking activities, they also have the world’s most secure distributed data storage platform!
 
-Danny started by recruiting “runners” to deliver fresh pizza from Pizza Runner Headquarters (otherwise known as Danny’s house) and also maxed out his credit card to pay freelance developers to build a mobile app to accept orders from customers.
+Customers are allocated cloud data storage limits which are directly linked to how much money they have in their accounts. There are a few interesting caveats that go with this business model, and this is where the Data Bank team need your help!
+
+The management team at Data Bank want to increase their total customer base - but also need some help tracking just how much data storage their customers will need.
+
+This case study is all about calculating metrics, growth and helping the business analyse their data in a smart way to better forecast and plan for their future developments!
 
 ## Entity Relationship Diagram
-
-Because Danny had a few years of experience as a data scientist - he was very aware that data collection was going to be critical for his business’ growth.
-
-He has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
-
-All datasets exist within the pizza_runner database schema - be sure to include this reference within your SQL scripts as you start exploring the data and answering the case study questions.
 
 <a id="entity-relationship-diagram"></a>
 
 <img src="./Images/Image2.png" alt="Image2" />
 
+The Data Bank team have prepared a data model for this case study as well as a few example rows from the complete dataset below to get you familiar with their tables.
+
+### Table 1: Regions
+
+Just like popular cryptocurrency platforms - Data Bank is also run off a network of nodes where both money and data is stored across the globe. In a traditional banking sense - you can think of these nodes as bank branches or stores that exist around the world.
+
+This `regions` table contains the `region_id` and their respective `region_name` values
+
+| region_id | region_name |
+| --------- | ----------- |
+| 1         | Africa      |
+| 2         | America     |
+| 3         | Asia        |
+| 4         | Europe      |
+| 5         | Oceania     |
+
+### Table 2: Customer Nodes
+
+Customers are randomly distributed across the nodes according to their region - this also specifies exactly which node contains both their cash and data.
+
+This random distribution changes frequently to reduce the risk of hackers getting into Data Bank’s system and stealing customer’s money and data!
+
+Below is a sample of the top 10 rows of the `data_bank.customer_nodes`
+
+| customer_id | region_id | node_id | start_date | end_date   |
+| ----------- | --------- | ------- | ---------- | ---------- |
+| 1           | 3         | 4       | 2020-01-02 | 2020-01-03 |
+| 2           | 3         | 5       | 2020-01-03 | 2020-01-17 |
+| 3           | 5         | 4       | 2020-01-27 | 2020-02-18 |
+| 4           | 5         | 4       | 2020-01-07 | 2020-01-19 |
+| 5           | 3         | 3       | 2020-01-15 | 2020-01-23 |
+| 6           | 1         | 1       | 2020-01-11 | 2020-02-06 |
+| 7           | 2         | 5       | 2020-01-20 | 2020-02-04 |
+| 8           | 1         | 2       | 2020-01-15 | 2020-01-28 |
+| 9           | 4         | 5       | 2020-01-21 | 2020-01-25 |
+| 10          | 3         | 4       | 2020-01-13 | 2020-01-14 |
+
+### Table 3: Customer Transactions
+
+This table stores all customer deposits, withdrawals and purchases made using their Data Bank debit card.
+
+| customer_id | txn_date   | txn_type | txn_amount |
+| ----------- | ---------- | -------- | ---------- |
+| 429         | 2020-01-21 | deposit  | 82         |
+| 155         | 2020-01-10 | deposit  | 712        |
+| 398         | 2020-01-01 | deposit  | 196        |
+| 255         | 2020-01-14 | deposit  | 563        |
+| 185         | 2020-01-29 | deposit  | 626        |
+| 309         | 2020-01-13 | deposit  | 995        |
+| 312         | 2020-01-20 | deposit  | 485        |
+| 376         | 2020-01-03 | deposit  | 706        |
+| 188         | 2020-01-13 | deposit  | 601        |
+| 138         | 2020-01-11 | deposit  | 520        |
+
 ## Case Study Questions
 
-### A. Pizza Metrics
+<a id='case-study-questions'></a>
 
-1. How many pizzas were ordered?
-2. How many unique customer orders were made?
-3. How many successful orders were delivered by each runner?
-4. How many of each type of pizza was delivered?
-5. How many Vegetarian and Meatlovers were ordered by each customer?
-6. What was the maximum number of pizzas delivered in a single order?
-7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
-8. How many pizzas were delivered that had both exclusions and extras?
-9. What was the total volume of pizzas ordered for each hour of the day?
-10. What was the volume of orders for each day of the week?
+### A. Customer Nodes Exploration
 
-### B. Runner and Customer Experience
+1. How many unique nodes are there on the Data Bank system?
+2. What is the number of nodes per region?
+3. How many customers are allocated to each region?
+4. How many days on average are customers reallocated to a different node?
+5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?
 
-1. How many runners signed up for each 1 week period? (i.e. week starts `2021-01-01`)
-2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
-3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
-4. What was the average distance travelled for each customer?
-5. What was the difference between the longest and shortest delivery times for all orders?
-6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
-7. What is the successful delivery percentage for each runner?
+### B. Customer Transactions
 
-### C. Ingredient Optimisation
+1. What is the unique count and total amount for each transaction type?
+2. What is the average total historical deposit counts and amounts for all customers?
+3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
+4. What is the closing balance for each customer at the end of the month?
+5. What is the percentage of customers who increase their closing balance by more than 5%?
 
-1. What are the standard ingredients for each pizza?
-2. What was the most commonly added extra?
-3. What was the most common exclusion?
-4. Generate an order item for each record in the `customers_orders` table in the format of one of the following:
-   - `Meat Lovers`
-   - `Meat Lovers - Exclude Beef`
-   - `Meat Lovers - Extra Bacon`
-   - `Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers`
-5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the `customer_orders` table and add a 2x in front of any relevant ingredients
-   - For example: `"Meat Lovers: 2xBacon, Beef, ... , Salami"`
-6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+### C. Data Allocation Challenge
 
-### D. Pricing and Ratings
+To test out a few different hypotheses - the Data Bank team wants to run an experiment where different groups of customers would be allocated data using 3 different options:
 
-1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
-2. What if there was an additional $1 charge for any pizza extras?
-   - Add cheese is $1 extra
-3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
-4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
-   - `customer_id`
-   - `order_id`
-   - `runner_id`
-   - `rating`
-   - `order_time`
-   - `pickup_time`
-   - `Time between order and pickup`
-   - `Delivery duration`
-   - `Average speed`
-   - `Total number of pizzas`
-5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+- Option 1: data is allocated based off the amount of money at the end of the previous month
+- Option 2: data is allocated on the average amount of money kept in the account in the previous 30 days
+- Option 3: data is updated real-time
+  For this multi-part challenge question - you have been requested to generate the following data elements to help the Data Bank team estimate how much data will need to be provisioned for each option:
 
-### E. Bonus Questions
+- running customer balance column that includes the impact each transaction
+- customer balance at the end of each month
+- minimum, average and maximum values of the running balance for each customer
+  Using all of the data available - how much data would have been required for each option on a monthly basis?
 
-If Danny wants to expand his range of pizzas - how would this impact the existing data design? Write an `INSERT` statement to demonstrate what would happen if a new `   Supreme` pizza with all the toppings was added to the Pizza Runner menu?
+### D. Extra Challenge
+
+Data Bank wants to try another option which is a bit more difficult to implement - they want to calculate data growth using an interest calculation, just like in a traditional savings account you might have with a bank.
+
+If the annual interest rate is set at 6% and the Data Bank team wants to reward its customers by increasing their data allocation based off the interest calculated on a daily basis at the end of each day, how much data would be required for this option on a monthly basis?
+
+Special notes:
+
+Data Bank wants an initial calculation which does not allow for compounding interest, however they may also be interested in a daily compounding interest calculation so you can try to perform this calculation if you have the stamina!
+
+### Extension Request
+
+The Data Bank team wants you to use the outputs generated from the above sections to create a quick Powerpoint presentation which will be used as marketing materials for both external investors who might want to buy Data Bank shares and new prospective customers who might want to bank with Data Bank.
+
+1. Using the outputs generated from the customer node questions, generate a few headline insights which Data Bank might use to market it’s world-leading security features to potential investors and customers.
+
+2. With the transaction analysis - prepare a 1 page presentation slide which contains all the relevant information about the various options for the data provisioning so the Data Bank management team can make an informed decision.
