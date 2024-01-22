@@ -1,6 +1,6 @@
 # Case Study #1 - Danny's Diner
 
-![Image](./Images/Image1.png)
+<img src="./Images/Image1.png" alt="Image" width="700" height="400" />
 
 ## SQL Queries and Outputs
 
