@@ -2,15 +2,15 @@
 
 <img src="./Images/Image1.png" alt="Image1" width="800" height="800" />
 
----
-
 ## Table of Contents
 
-- [Problem Statement](##Problem-Statement)
-- [Entity Relationship Diagram](##Entity-Relationship-Diagram)
-- [SQL Queries and Outputs](##SQL-Queries-and-Outputs)
+- [Problem Statement](#problem-statement)
+- [Entity Relationship Diagram](#entity-relationship-diagram)
+- [SQL Queries and Outputs](#sql-queries-and-outputs)
 
 ## Problem Statement
+
+<a id="problem-statement"></a>
 
 Danny seriously loves Japanese food so in the beginning of 2021, he decides to embark upon a risky venture and opens up a cute little restaurant that sells his 3 favourite foods: sushi, curry and ramen.
 
@@ -22,21 +22,17 @@ He plans on using these insights to help him decide whether he should expand the
 
 Danny has provided you with a sample of his overall customer data due to privacy issues - but he hopes that these examples are enough for you to write fully functioning SQL queries to help him answer his questions!
 
-Danny has shared with you 3 key datasets for this case study:
-
-- `sales`
-- `menu`
-- `members`
-
----
+Danny has shared with you 3 key datasets for this case study: - `sales` - `menu` - `members`
 
 ## Entity Relationship Diagram
 
-![Image2](./Images/Image2.png)
+<a id="entity-relationship-diagram"></a>
 
----
+![Entity Relationship Diagram](./Images/Image2.png)
 
 ## SQL Queries and Outputs
+
+<a id="sql-queries-and-outputs"></a>
 
 ### 1. What is the total amount each customer spent at the restaurant?
 
