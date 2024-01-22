@@ -1,14 +1,14 @@
 # Case Study #1 - Danny's Diner
 
-<img src="./Images/Image1.png" alt="Image" width="800" height="800" />
+<img src="./Images/Image1.png" alt="Image1" width="800" height="800" />
 
 ---
 
 ## Table of Contents
 
-- [Problem Statement](##problem-statement)
-- [Entity Relationship Diagram](##entity-relationship-diagram)
-- [SQL Queries and Outputs](##sql-queries-and-outputs)
+- [Problem Statement](##Problem-Statement)
+- [Entity Relationship Diagram](##Entity-Relationship-Diagram)
+- [SQL Queries and Outputs](##SQL-Queries-and-Outputs)
 
 ## Problem Statement
 
@@ -32,7 +32,7 @@ Danny has shared with you 3 key datasets for this case study:
 
 ## Entity Relationship Diagram
 
-<img src="./Images/Image2.png" alt="Image" width="800" height="800" />
+<img src="./Images/Image2.png" alt="Image2" width="800" height="800" />
 
 ---
 
