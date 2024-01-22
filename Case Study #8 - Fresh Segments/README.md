@@ -1,4 +1,4 @@
-# Case Study #3 - Foodie-Fi
+# Case Study #8 - Fresh Segments
 
 <img src="./Images/Image1.png" alt="Image1" width="800" height="800" />
 
@@ -6,90 +6,133 @@
 
 - [Problem Statement](#problem-statement)
 - [Entity Relationship Diagram](#entity-relationship-diagram)
-- [SQL Queries and Outputs](#sql-queries-and-outputs)
+- [Case Study Questions](#case-study-questions)
 
 ## Problem Statement
 
 <a id="problem-statement"></a>
 
-Did you know that over 115 million kilograms of pizza is consumed daily worldwide??? (Well according to Wikipedia anyway…)
+Danny created Fresh Segments, a digital marketing agency that helps other businesses analyse trends in online ad click behaviour for their unique customer base.
 
-Danny was scrolling through his Instagram feed when something really caught his eye - “80s Retro Styling and Pizza Is The Future!”
+Clients share their customer lists with the Fresh Segments team who then aggregate interest metrics and generate a single dataset worth of metrics for further analysis.
 
-Danny was sold on the idea, but he knew that pizza alone was not going to help him get seed funding to expand his new Pizza Empire - so he had one more genius idea to combine with it - he was going to Uberize it - and so Pizza Runner was launched!
+In particular - the composition and rankings for different interests are provided for each client showing the proportion of their customer list who interacted with online assets related to each interest for each month.
 
-Danny started by recruiting “runners” to deliver fresh pizza from Pizza Runner Headquarters (otherwise known as Danny’s house) and also maxed out his credit card to pay freelance developers to build a mobile app to accept orders from customers.
+Danny has asked for your assistance to analyse aggregated metrics for an example client and provide some high level insights about the customer list and their interests.
 
 ## Entity Relationship Diagram
-
-Because Danny had a few years of experience as a data scientist - he was very aware that data collection was going to be critical for his business’ growth.
-
-He has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
-
-All datasets exist within the pizza_runner database schema - be sure to include this reference within your SQL scripts as you start exploring the data and answering the case study questions.
 
 <a id="entity-relationship-diagram"></a>
 
 <img src="./Images/Image2.png" alt="Image2" />
 
+For this case study there is a total of 2 datasets which you will need to use to solve the questions.
+
+### Interest Metrics
+
+This table contains information about aggregated interest metrics for a specific major client of Fresh Segments which makes up a large proportion of their customer base.
+
+Each record in this table represents the performance of a specific `interest_id` based on the client’s customer base interest measured through clicks and interactions with specific targeted advertising content.
+
+| \_month | \_year | month_year | interest_id | composition | index_value | ranking | percentile_ranking |
+| ------- | ------ | ---------- | ----------- | ----------- | ----------- | ------- | ------------------ |
+| 7       | 2018   | 07-2018    | 32486       | 11.89       | 6.19        | 1       | 99.86              |
+| 7       | 2018   | 07-2018    | 6106        | 9.93        | 5.31        | 2       | 99.73              |
+| 7       | 2018   | 07-2018    | 18923       | 10.85       | 5.29        | 3       | 99.59              |
+| 7       | 2018   | 07-2018    | 6344        | 10.32       | 5.1         | 4       | 99.45              |
+| 7       | 2018   | 07-2018    | 100         | 10.77       | 5.04        | 5       | 99.31              |
+| 7       | 2018   | 07-2018    | 69          | 10.82       | 5.03        | 6       | 99.18              |
+| 7       | 2018   | 07-2018    | 79          | 11.21       | 4.97        | 7       | 99.04              |
+| 7       | 2018   | 07-2018    | 6111        | 10.71       | 4.83        | 8       | 98.9               |
+| 7       | 2018   | 07-2018    | 6214        | 9.71        | 4.83        | 8       | 98.9               |
+| 7       | 2018   | 07-2018    | 19422       | 10.11       | 4.81        | 10      | 98.63              |
+
+For example - let’s interpret the first row of the `interest_metrics` table together:
+
+| \_month | \_year | month_year | interest_id | composition | index_value | ranking | percentile_ranking |
+| ------- | ------ | ---------- | ----------- | ----------- | ----------- | ------- | ------------------ |
+| 7       | 2018   | 07-2018    | 32486       | 11.89       | 6.19        | 1       | 99.86              |
+
+In July 2018, the composition metric is 11.89, meaning that 11.89% of the client’s customer list interacted with the interest interest_id = 32486 - we can link interest_id to a separate mapping table to find the segment name called “Vacation Rental Accommodation Researchers”
+
+The index_value is 6.19, means that the composition value is 6.19x the average composition value for all Fresh Segments clients’ customer for this particular interest in the month of July 2018.
+
+The ranking and percentage_ranking relates to the order of index_value records in each month year.
+
+### Interest Map
+
+This mapping table links the `interest_id` with their relevant interest information. You will need to join this table onto the previous `interest_details` table to obtain the `interest_name` as well as any details about the summary information.
+
+| id  | interest_name             | interest_summary                                                                   | created_at          | last_modified       |
+| --- | ------------------------- | ---------------------------------------------------------------------------------- | ------------------- | ------------------- |
+| 1   | Fitness Enthusiasts       | Consumers using fitness tracking apps and websites.                                | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+| 2   | Gamers                    | Consumers researching game reviews and cheat codes.                                | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+| 3   | Car Enthusiasts           | Readers of automotive news and car reviews.                                        | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+| 4   | Luxury Retail Researchers | Consumers researching luxury product reviews and gift ideas.                       | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+| 5   | Brides & Wedding Planners | People researching wedding ideas and vendors.                                      | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+| 6   | Vacation Planners         | Consumers reading reviews of vacation destinations and accommodations.             | 2016-05-26 14:57:59 | 2018-05-23 11:30:13 |
+| 7   | Motorcycle Enthusiasts    | Readers of motorcycle news and reviews.                                            | 2016-05-26 14:57:59 | 2018-05-23 11:30:13 |
+| 8   | Business News Readers     | Readers of online business news content.                                           | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+| 12  | Thrift Store Shoppers     | Consumers shopping online for clothing at thrift stores and researching locations. | 2016-05-26 14:57:59 | 2018-03-16 13:14:00 |
+| 13  | Advertising Professionals | People who read advertising industry news.                                         | 2016-05-26 14:57:59 | 2018-05-23 11:30:12 |
+
 ## Case Study Questions
 
-### A. Pizza Metrics
+The following questions can be considered key business questions and metrics that the Balanced Tree team requires for their monthly reports.
 
-1. How many pizzas were ordered?
-2. How many unique customer orders were made?
-3. How many successful orders were delivered by each runner?
-4. How many of each type of pizza was delivered?
-5. How many Vegetarian and Meatlovers were ordered by each customer?
-6. What was the maximum number of pizzas delivered in a single order?
-7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
-8. How many pizzas were delivered that had both exclusions and extras?
-9. What was the total volume of pizzas ordered for each hour of the day?
-10. What was the volume of orders for each day of the week?
+Each question can be answered using a single query - but as you are writing the SQL to solve each individual problem, keep in mind how you would generate all of these metrics in a single SQL script which the Balanced Tree team can run each month.
 
-### B. Runner and Customer Experience
+### A. Data Exploration and Cleansing
 
-1. How many runners signed up for each 1 week period? (i.e. week starts `2021-01-01`)
-2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
-3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
-4. What was the average distance travelled for each customer?
-5. What was the difference between the longest and shortest delivery times for all orders?
-6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
-7. What is the successful delivery percentage for each runner?
+1. Update the `fresh_segments.interest_metrics` table by modifying the `month_year` column to be a date data type with the start of the month.
+2. What is count of records in the `fresh_segments.interest_metrics` for each `month_year` value sorted in chronological order (earliest to latest) with the null values appearing first?
+3. What do you think we should do with these null values in the `fresh_segments.interest_metrics`.
+4. How many `interest_id` values exist in the `fresh_segments.interest_metrics` table but not in the `fresh_segments.interest_map` table? What about the other way around?
+5. Summarise the `id` values in the `fresh_segments.interest_map` by its total record count in this table.
+6. What sort of table join should we perform for our analysis and why? Check your logic by checking the rows where `interest_id = 21246` in your joined output and include all columns from `fresh_segments.interest_metrics` and all columns from fresh_segments.interest_map except from the `id column.
+7. Are there any records in your joined table where the `month_year` value is before the `created_at` value from the `fresh_segments.interest_map` table? Do you think these values are valid and why?
 
-### C. Ingredient Optimisation
+### B. Interest Analysis
 
-1. What are the standard ingredients for each pizza?
-2. What was the most commonly added extra?
-3. What was the most common exclusion?
-4. Generate an order item for each record in the `customers_orders` table in the format of one of the following:
-   - `Meat Lovers`
-   - `Meat Lovers - Exclude Beef`
-   - `Meat Lovers - Extra Bacon`
-   - `Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers`
-5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the `customer_orders` table and add a 2x in front of any relevant ingredients
-   - For example: `"Meat Lovers: 2xBacon, Beef, ... , Salami"`
-6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+1. Which interests have been present in all `month_year` dates in our dataset?
+2. Using this same `total_months` measure - calculate the cumulative percentage of all records starting at 14 months - which `total_months` value passes the 90% cumulative percentage value?
+3. If we were to remove all `interest_id` values which are lower than the `total_months` value we found in the previous question - how many total data points would we be removing?
+4. Does this decision make sense to remove these data points from a business perspective? Use an example where there are all 14 months present to a removed `interest` example for your arguments - think about what it means to have less months present from a segment perspective.
+5. After removing these interests - how many unique interests are there for each month?
 
-### D. Pricing and Ratings
+### C. Segment Analysis
 
-1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
-2. What if there was an additional $1 charge for any pizza extras?
-   - Add cheese is $1 extra
-3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
-4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
-   - `customer_id`
-   - `order_id`
-   - `runner_id`
-   - `rating`
-   - `order_time`
-   - `pickup_time`
-   - `Time between order and pickup`
-   - `Delivery duration`
-   - `Average speed`
-   - `Total number of pizzas`
-5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+1. Using our filtered dataset by removing the interests with less than 6 months worth of data, which are the top 10 and bottom 10 interests which have the largest composition values in any `month_year`? Only use the maximum composition value for each interest but you must keep the corresponding `month_year`.
+2. Which 5 interests had the lowest average `ranking` value?
+3. Which 5 interests had the largest standard deviation in their `percentile_ranking` value?
+4. For the 5 interests found in the previous question - what was minimum and maximum `percentile_ranking` values for each interest and its corresponding `year_month value? Can you describe what is happening for these 5 interests?
+5. How would you describe our customers in this segment based off their composition and ranking values? What sort of products or services should we show to these customers and what should we avoid?
 
-### E. Bonus Questions
+### D. Index Analysis
 
-If Danny wants to expand his range of pizzas - how would this impact the existing data design? Write an `INSERT` statement to demonstrate what would happen if a new `   Supreme` pizza with all the toppings was added to the Pizza Runner menu?
+The index_value is a measure which can be used to reverse calculate the average composition for Fresh Segments’ clients.
+
+Average composition can be calculated by dividing the composition column by the index_value column rounded to 2 decimal places.
+
+What is the top 10 interests by the average composition for each month?
+For all of these top 10 interests - which interest appears the most often?
+What is the average of the average composition for the top 10 interests for each month?
+What is the 3 month rolling average of the max average composition value from September 2018 to August 2019 and include the previous top ranking interests in the same output shown below.
+Provide a possible reason why the max average composition might change from month to month? Could it signal something is not quite right with the overall business model for Fresh Segments?
+
+Required output for question 4:
+
+| month_year | interest_name                 | max_index_composition | 3_month_moving_avg | 1_month_ago                       | 2_months_ago                      |
+| ---------- | ----------------------------- | --------------------- | ------------------ | --------------------------------- | --------------------------------- |
+| 2018-09-01 | Work Comes First Travelers    | 8.26                  | 7.61               | Las Vegas Trip Planners: 7.21     | Las Vegas Trip Planners: 7.36     |
+| 2018-10-01 | Work Comes First Travelers    | 9.14                  | 8.20               | Work Comes First Travelers: 8.26  | Las Vegas Trip Planners: 7.21     |
+| 2018-11-01 | Work Comes First Travelers    | 8.28                  | 8.56               | Work Comes First Travelers: 9.14  | Work Comes First Travelers: 8.26  |
+| 2018-12-01 | Work Comes First Travelers    | 8.31                  | 8.58               | Work Comes First Travelers: 8.28  | Work Comes First Travelers: 9.14  |
+| 2019-01-01 | Work Comes First Travelers    | 7.66                  | 8.08               | Work Comes First Travelers: 8.31  | Work Comes First Travelers: 8.28  |
+| 2019-02-01 | Work Comes First Travelers    | 7.66                  | 7.88               | Work Comes First Travelers: 7.66  | Work Comes First Travelers: 8.31  |
+| 2019-03-01 | Alabama Trip Planners         | 6.54                  | 7.29               | Work Comes First Travelers: 7.66  | Work Comes First Travelers: 7.66  |
+| 2019-04-01 | Solar Energy Researchers      | 6.28                  | 6.83               | Alabama Trip Planners: 6.54       | Work Comes First Travelers: 7.66  |
+| 2019-05-01 | Readers of Honduran Content   | 4.41                  | 5.74               | Solar Energy Researchers: 6.28    | Alabama Trip Planners: 6.54       |
+| 2019-06-01 | Las Vegas Trip Planners       | 2.77                  | 4.49               | Readers of Honduran Content: 4.41 | Solar Energy Researchers: 6.28    |
+| 2019-07-01 | Las Vegas Trip Planners       | 2.82                  | 3.33               | Las Vegas Trip Planners: 2.77     | Readers of Honduran Content: 4.41 |
+| 2019-08-01 | Cosmetics and Beauty Shoppers | 2.73                  | 2.77               | Las Vegas Trip Planners: 2.82     | Las Vegas Trip Planners: 2.77     |
