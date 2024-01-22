@@ -120,7 +120,7 @@ Using the available datasets - answer the following questions using a single que
 8. What is the number of views and cart adds for each product category?
 9. What are the top 3 products by purchases?
 
-### B. 3. Product Funnel Analysis
+### B. Product Funnel Analysis
 
 Using a single SQL query - create a new output table which has the following details:
 
