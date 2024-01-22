@@ -1,6 +1,6 @@
-# SQL Queries and Outputs
+## SQL Queries and Outputs
 
-## 1. What is the total amount each customer spent at the restaurant?
+### 1. What is the total amount each customer spent at the restaurant?
 
 ```sql
 SELECT SALES.customer_id, SUM(MENU.price) as Total_amt_spend
@@ -18,7 +18,7 @@ Output:
 | B | 74 |
 | C | 36 |
 
-## 2. How many days has each customer visited the restaurant?
+### 2. How many days has each customer visited the restaurant?
 
 ```sql
 SELECT SALES.customer_id, SUM(MENU.price) as Total_amt_spend
@@ -36,7 +36,7 @@ Output:
 | B | 6 |
 | C | 2 |
 
-## 3. What was the first item from the menu purchased by each customer?
+### 3. What was the first item from the menu purchased by each customer?
 
 ```sql
 WITH item_purchased_by_customer
@@ -64,7 +64,7 @@ Output:
 | B | curry |
 | C | ramen |
 
-## 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+### 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 
 ```sql
 SELECT MENU.product_name,
@@ -82,7 +82,7 @@ Output:
 |--------------|------------|
 | ramen | 8 |
 
-## 5. Which item was the most popular for each customer?
+### 5. Which item was the most popular for each customer?
 
 ```sql
 WITH most_popular
@@ -108,7 +108,7 @@ Output:
 | B | ramen | 2 |
 | C | ramen | 3 |
 
-## 6. Which item was purchased first by the customer after they became a member?
+### 6. Which item was purchased first by the customer after they became a member?
 
 ```sql
 WITH first_item_purchased AS (
@@ -134,7 +134,7 @@ Output:
 | A | ramen |
 | B | sushi |
 
-## 7. Which item was purchased just before the customer became a member?
+### 7. Which item was purchased just before the customer became a member?
 
 ```sql
 WITH first_item_purchased AS (
@@ -161,7 +161,7 @@ Output:
 | A | curry |
 |B | sushi |
 
-## 8. What is the total items and amount spent for each member before they became a member?
+### 8. What is the total items and amount spent for each member before they became a member?
 
 ```sql
 SELECT SALES.customer_id,
@@ -182,7 +182,7 @@ Output:
 | A | 2 | 25 |
 | B | 3 | 40 |
 
-## 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier how many points would each customer have?
+### 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier how many points would each customer have?
 
 ```sql
 WITH cte AS (
@@ -206,7 +206,7 @@ Output:
 | B | 940 |
 | C | 360 |
 
-## 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi how many points do customer A and B have at the end of January?
+### 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi how many points do customer A and B have at the end of January?
 
 ```sql
 WITH dates_cte AS (
@@ -288,8 +288,6 @@ Output:
 | C | 2021-01-01 | ramen | 12 | N |
 | C | 2021-01-01 | ramen | 12 | N |
 | C | 2021-01-07 | ramen | 12 | N |
-
-## BONUS QUESTIONS:
 
 ### Part 2 - Rank All The Things: Danny also requires further information about the ranking of customer products, but he purposely does not need the ranking for non-member purchases so he expects null ranking values for the records when customers are not yet part of the loyalty program.:
 
