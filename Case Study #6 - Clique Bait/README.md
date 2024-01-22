@@ -1,4 +1,4 @@
-# Case Study #3 - Foodie-Fi
+# Case Study #6 - Clique Bait
 
 <img src="./Images/Image1.png" alt="Image1" width="800" height="800" />
 
@@ -6,90 +6,159 @@
 
 - [Problem Statement](#problem-statement)
 - [Entity Relationship Diagram](#entity-relationship-diagram)
-- [SQL Queries and Outputs](#sql-queries-and-outputs)
+- [Case Study Questions](#case-study-questions)
 
 ## Problem Statement
 
 <a id="problem-statement"></a>
 
-Did you know that over 115 million kilograms of pizza is consumed daily worldwide??? (Well according to Wikipedia anyway…)
+Clique Bait is not like your regular online seafood store - the founder and CEO Danny, was also a part of a digital data analytics team and wanted to expand his knowledge into the seafood industry!
 
-Danny was scrolling through his Instagram feed when something really caught his eye - “80s Retro Styling and Pizza Is The Future!”
-
-Danny was sold on the idea, but he knew that pizza alone was not going to help him get seed funding to expand his new Pizza Empire - so he had one more genius idea to combine with it - he was going to Uberize it - and so Pizza Runner was launched!
-
-Danny started by recruiting “runners” to deliver fresh pizza from Pizza Runner Headquarters (otherwise known as Danny’s house) and also maxed out his credit card to pay freelance developers to build a mobile app to accept orders from customers.
+In this case study - you are required to support Danny’s vision and analyse his dataset and come up with creative solutions to calculate funnel fallout rates for the Clique Bait online store.
 
 ## Entity Relationship Diagram
-
-Because Danny had a few years of experience as a data scientist - he was very aware that data collection was going to be critical for his business’ growth.
-
-He has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
-
-All datasets exist within the pizza_runner database schema - be sure to include this reference within your SQL scripts as you start exploring the data and answering the case study questions.
 
 <a id="entity-relationship-diagram"></a>
 
 <img src="./Images/Image2.png" alt="Image2" />
 
+For this case study there is a total of 5 datasets which you will need to combine to solve all of the questions.
+
+### Users
+
+Customers who visit the Clique Bait website are tagged via their `cookie_id`.
+
+| user_id | cookie_id | start_date          |
+| ------- | --------- | ------------------- |
+| 397     | 3759ff    | 2020-03-30 00:00:00 |
+| 215     | 863329    | 2020-01-26 00:00:00 |
+| 191     | eefca9    | 2020-03-15 00:00:00 |
+| 89      | 764796    | 2020-01-07 00:00:00 |
+| 127     | 17ccc5    | 2020-01-22 00:00:00 |
+| 81      | b0b666    | 2020-03-01 00:00:00 |
+| 260     | a4f236    | 2020-01-08 00:00:00 |
+| 203     | d1182f    | 2020-04-18 00:00:00 |
+| 23      | 12dbc8    | 2020-01-18 00:00:00 |
+| 375     | f61d69    | 2020-01-03 00:00:00 |
+
+### Events
+
+Customer visits are logged in this `events` table at a `cookie_id` level and the `event_type` and `page_id` values can be used to join onto relevant satellite tables to obtain further information about each event.
+
+The sequence_number is used to order the events within each visit.
+
+| visit_id | cookie_id | page_id | event_type | sequence_number | event_time                 |
+| -------- | --------- | ------- | ---------- | --------------- | -------------------------- |
+| 719fd3   | 3d83d3    | 5       | 1          | 4               | 2020-03-02 00:29:09.975502 |
+| fb1eb1   | c5ff25    | 5       | 2          | 8               | 2020-01-22 07:59:16.761931 |
+| 23fe81   | 1e8c2d    | 10      | 1          | 9               | 2020-03-21 13:14:11.745667 |
+| ad91aa   | 648115    | 6       | 1          | 3               | 2020-04-27 16:28:09.824606 |
+| 5576d7   | ac418c    | 6       | 1          | 4               | 2020-01-18 04:55:10.149236 |
+| 48308b   | c686c1    | 8       | 1          | 5               | 2020-01-29 06:10:38.702163 |
+| 46b17d   | 78f9b3    | 7       | 1          | 12              | 2020-02-16 09:45:31.926407 |
+| 9fd196   | ccf057    | 4       | 1          | 5               | 2020-02-14 08:29:12.922164 |
+| edf853   | f85454    | 1       | 1          | 1               | 2020-02-22 12:59:07.652207 |
+| 3c6716   | 02e74f    | 3       | 2          | 5               | 2020-01-31 17:56:20.777383 |
+
+### Event Identifier
+
+The `event_identifier` table shows the types of events which are captured by Clique Bait’s digital data systems.
+
+| event_type | event_name    |
+| ---------- | ------------- |
+| 1          | Page View     |
+| 2          | Add to Cart   |
+| 3          | Purchase      |
+| 4          | Ad Impression |
+| 5          | Ad Click      |
+
+### Campaign Identifier
+
+This table shows information for the 3 campaigns that Clique Bait has ran on their website so far in 2020.
+
+| campaign_id | products | campaign_name                     | start_date          | end_date            |
+| ----------- | -------- | --------------------------------- | ------------------- | ------------------- |
+| 1           | 1-3      | BOGOF - Fishing For Compliments   | 2020-01-01 00:00:00 | 2020-01-14 00:00:00 |
+| 2           | 4-5      | 25% Off - Living The Lux Life     | 2020-01-15 00:00:00 | 2020-01-28 00:00:00 |
+| 3           | 6-8      | Half Off - Treat Your Shellf(ish) | 2020-02-01 00:00:00 | 2020-03-31 00:00:00 |
+
+### Page Hierarchy
+
+This table lists all of the pages on the Clique Bait website which are tagged and have data passing through from user interaction events.
+
+| page_id | page_name      | product_category | product_id |
+| ------- | -------------- | ---------------- | ---------- |
+| 1       | Home Page      | null             | null       |
+| 2       | All Products   | null             | null       |
+| 3       | Salmon         | Fish             | 1          |
+| 4       | Kingfish       | Fish             | 2          |
+| 5       | Tuna           | Fish             | 3          |
+| 6       | Russian Caviar | Luxury           | 4          |
+| 7       | Black Truffle  | Luxury           | 5          |
+| 8       | Abalone        | Shellfish        | 6          |
+| 9       | Lobster        | Shellfish        | 7          |
+| 10      | Crab           | Shellfish        | 8          |
+| 11      | Oyster         | Shellfish        | 9          |
+| 12      | Checkout       | null             | null       |
+| 13      | Confirmation   | null             | null       |
+
 ## Case Study Questions
 
-### A. Pizza Metrics
+<a id='case-study-questions'></a>
 
-1. How many pizzas were ordered?
-2. How many unique customer orders were made?
-3. How many successful orders were delivered by each runner?
-4. How many of each type of pizza was delivered?
-5. How many Vegetarian and Meatlovers were ordered by each customer?
-6. What was the maximum number of pizzas delivered in a single order?
-7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
-8. How many pizzas were delivered that had both exclusions and extras?
-9. What was the total volume of pizzas ordered for each hour of the day?
-10. What was the volume of orders for each day of the week?
+### A. Digital Analysis
 
-### B. Runner and Customer Experience
+Using the available datasets - answer the following questions using a single query for each one:
 
-1. How many runners signed up for each 1 week period? (i.e. week starts `2021-01-01`)
-2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
-3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
-4. What was the average distance travelled for each customer?
-5. What was the difference between the longest and shortest delivery times for all orders?
-6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
-7. What is the successful delivery percentage for each runner?
+1. How many users are there?
+2. How many cookies does each user have on average?
+3. What is the unique number of visits by all users per month?
+4. What is the number of events for each event type?
+5. What is the percentage of visits which have a purchase event?
+6. What is the percentage of visits which view the checkout page but do not have a purchase event?
+7. What are the top 3 pages by number of views?
+8. What is the number of views and cart adds for each product category?
+9. What are the top 3 products by purchases?
 
-### C. Ingredient Optimisation
+### B. 3. Product Funnel Analysis
 
-1. What are the standard ingredients for each pizza?
-2. What was the most commonly added extra?
-3. What was the most common exclusion?
-4. Generate an order item for each record in the `customers_orders` table in the format of one of the following:
-   - `Meat Lovers`
-   - `Meat Lovers - Exclude Beef`
-   - `Meat Lovers - Extra Bacon`
-   - `Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers`
-5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the `customer_orders` table and add a 2x in front of any relevant ingredients
-   - For example: `"Meat Lovers: 2xBacon, Beef, ... , Salami"`
-6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+Using a single SQL query - create a new output table which has the following details:
 
-### D. Pricing and Ratings
+- How many times was each product viewed?
+- How many times was each product added to cart?
+- How many times was each product added to a cart but not purchased (abandoned)?
+- How many times was each product purchased?
 
-1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
-2. What if there was an additional $1 charge for any pizza extras?
-   - Add cheese is $1 extra
-3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
-4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
-   - `customer_id`
-   - `order_id`
-   - `runner_id`
-   - `rating`
-   - `order_time`
-   - `pickup_time`
-   - `Time between order and pickup`
-   - `Delivery duration`
-   - `Average speed`
-   - `Total number of pizzas`
-5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+Additionally, create another table which further aggregates the data for the above points but this time for each product category instead of individual products.
 
-### E. Bonus Questions
+Use your 2 new output tables - answer the following questions:
 
-If Danny wants to expand his range of pizzas - how would this impact the existing data design? Write an `INSERT` statement to demonstrate what would happen if a new `   Supreme` pizza with all the toppings was added to the Pizza Runner menu?
+1. Which product had the most views, cart adds and purchases?
+2. Which product was most likely to be abandoned?
+3. Which product had the highest view to purchase percentage?
+4. What is the average conversion rate from view to cart add?
+5. What is the average conversion rate from cart add to purchase?
+
+### C. Campaigns Analysis
+
+Generate a table that has 1 single row for every unique `visit_id` record and has the following columns:
+
+- `user_id`
+- `visit_id`
+- `visit_start_time`: the earliest `event_time` for each visit
+- `page_views`: count of page views for each visit
+- `cart_adds`: count of product cart add events for each visit
+- `purchase`: 1/0 flag if a purchase event exists for each visit
+- `campaign_name`: map the visit to a campaign if the `visit_start_time` falls between the `start_date` and `end_date`
+- `impression`: count of ad impressions for each visit
+- `click`: count of ad clicks for each visit
+- **(Optional column)** `cart_products`: a comma separated text value with products added to the cart sorted by the order they were added to the cart (hint: use the `sequence_number`)
+
+Use the subsequent dataset to generate at least 5 insights for the Clique Bait team - bonus: prepare a single A4 infographic that the team can use for their management reporting sessions, be sure to emphasise the most important points from your findings.
+
+Some ideas you might want to investigate further include:
+
+- Identifying users who have received impressions during each campaign period and comparing each metric with other users who did not have an impression event
+- Does clicking on an impression lead to higher purchase rates?
+- What is the uplift in purchase rate when comparing users who click on a campaign impression versus users who do not receive an impression? What if we compare them with users who just an impression but do not click?
+- What metrics can you use to quantify the success or failure of each campaign compared to each other?
