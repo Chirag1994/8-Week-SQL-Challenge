@@ -28,7 +28,7 @@ Danny has shared with you 3 key datasets for this case study: - `sales` - `menu`
 
 <a id="entity-relationship-diagram"></a>
 
-![Entity Relationship Diagram](./Images/Image2.png)
+<img src="./Images/Image2.png" alt="Image2" />
 
 ## SQL Queries and Outputs
 
