@@ -1,4 +1,4 @@
-# Case Study #3 - Foodie-Fi
+# Case Study #5 - Data Mart
 
 <img src="./Images/Image1.png" alt="Image1" width="800" height="800" />
 
@@ -6,90 +6,124 @@
 
 - [Problem Statement](#problem-statement)
 - [Entity Relationship Diagram](#entity-relationship-diagram)
-- [SQL Queries and Outputs](#sql-queries-and-outputs)
+- [Case Study Questions](#case-study-questions)
 
 ## Problem Statement
 
 <a id="problem-statement"></a>
 
-Did you know that over 115 million kilograms of pizza is consumed daily worldwide??? (Well according to Wikipedia anyway…)
+Data Mart is Danny’s latest venture and after running international operations for his online supermarket that specialises in fresh produce - Danny is asking for your support to analyse his sales performance.
 
-Danny was scrolling through his Instagram feed when something really caught his eye - “80s Retro Styling and Pizza Is The Future!”
+In June 2020 - large scale supply changes were made at Data Mart. All Data Mart products now use sustainable packaging methods in every single step from the farm all the way to the customer.
 
-Danny was sold on the idea, but he knew that pizza alone was not going to help him get seed funding to expand his new Pizza Empire - so he had one more genius idea to combine with it - he was going to Uberize it - and so Pizza Runner was launched!
+Danny needs your help to quantify the impact of this change on the sales performance for Data Mart and it’s separate business areas.
 
-Danny started by recruiting “runners” to deliver fresh pizza from Pizza Runner Headquarters (otherwise known as Danny’s house) and also maxed out his credit card to pay freelance developers to build a mobile app to accept orders from customers.
+The key business question he wants you to help him answer are the following:
+
+- What was the quantifiable impact of the changes introduced in June 2020?
+- Which platform, region, segment and customer types were the most impacted by this change?
+- What can we do about future introduction of similar sustainability updates to the business to minimise impact on sales?
 
 ## Entity Relationship Diagram
-
-Because Danny had a few years of experience as a data scientist - he was very aware that data collection was going to be critical for his business’ growth.
-
-He has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
-
-All datasets exist within the pizza_runner database schema - be sure to include this reference within your SQL scripts as you start exploring the data and answering the case study questions.
 
 <a id="entity-relationship-diagram"></a>
 
 <img src="./Images/Image2.png" alt="Image2" />
 
+For this case study there is only a single table: `data_mart.weekly_sales`
+
+The `Entity Relationship Diagram` is shown below with the data types made clear, please note that there is only this one table - hence why it looks a little bit lonely!
+
+### Column Dictionary
+
+The columns are pretty self-explanatory based on the column names but here are some further details about the dataset:
+
+1. Data Mart has international operations using a multi-`region` strategy
+2. Data Mart has both, a retail and online `platform` in the form of a Shopify store front to serve their customers
+3. Customer `segment` and `customer_type` data relates to personal age and demographics information that is shared with Data Mart
+4. `transactions` is the count of unique purchases made through Data Mart and `sales` is the actual dollar amount of purchases
+   Each record in the dataset is related to a specific aggregated slice of the underlying sales data rolled up into a `week_date` value which represents the start of the sales week.
+
+### Example Rows
+
+10 random rows are shown in the table output below from `data_mart.weekly_sales`:
+| week_date | region | platform | segment | customer_type | transactions | sales |
+|-----------|-----------------|----------|----------|---------------|--------------|------------|
+| 9/9/20 | OCEANIA | Shopify | C3 | New | 610 | 110033.89 |
+| 29/7/20 | AFRICA | Retail | C1 | New | 110692 | 3053771.19 |
+| 22/7/20 | EUROPE | Shopify | C4 | Existing | 24 | 8101.54 |
+| 13/5/20 | AFRICA | Shopify | null | Guest | 5287 | 1003301.37 |
+| 24/7/19 | ASIA | Retail | C1 | New | 127342 | 3151780.41 |
+| 10/7/19 | CANADA | Shopify | F3 | New | 51 | 8844.93 |
+| 26/6/19 | OCEANIA | Retail | C3 | New | 152921 | 5551385.36 |
+| 29/5/19 | SOUTH AMERICA | Shopify | null | New | 53 | 10056.2 |
+| 22/8/18 | AFRICA | Retail | null | Existing | 31721 | 1718863.58 |
+| 25/7/18 | SOUTH AMERICA | Retail | null | New | 2136 | 81757.91 |
+
 ## Case Study Questions
 
-### A. Pizza Metrics
+<a id='case-study-questions'></a>
 
-1. How many pizzas were ordered?
-2. How many unique customer orders were made?
-3. How many successful orders were delivered by each runner?
-4. How many of each type of pizza was delivered?
-5. How many Vegetarian and Meatlovers were ordered by each customer?
-6. What was the maximum number of pizzas delivered in a single order?
-7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
-8. How many pizzas were delivered that had both exclusions and extras?
-9. What was the total volume of pizzas ordered for each hour of the day?
-10. What was the volume of orders for each day of the week?
+### A. Data Cleansing Steps
 
-### B. Runner and Customer Experience
+In a single query, perform the following operations and generate a new table in the `data_mart` schema named `clean_weekly_sales`:
 
-1. How many runners signed up for each 1 week period? (i.e. week starts `2021-01-01`)
-2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
-3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
-4. What was the average distance travelled for each customer?
-5. What was the difference between the longest and shortest delivery times for all orders?
-6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
-7. What is the successful delivery percentage for each runner?
+- Convert the `week_date` to a DATE format
+- Add a `week_number` as the second column for each `week_date` value, for example any value from the 1st of January to 7th of January will be 1, 8th to 14th will be 2 etc.
+- Add a `month_number` with the calendar month for each `week_date` value as the 3rd column.
+- Add a `calendar_year` column as the 4th column containing either 2018, 2019 or 2020 values.
+- Add a new column called `age_band` after the original segment column using the following mapping on the number inside the segment value.
 
-### C. Ingredient Optimisation
+| segment | age_band     |
+| ------- | ------------ |
+| 1       | Young Adults |
+| 2       | Middle Aged  |
+| 3 or 4  | Retirees     |
 
-1. What are the standard ingredients for each pizza?
-2. What was the most commonly added extra?
-3. What was the most common exclusion?
-4. Generate an order item for each record in the `customers_orders` table in the format of one of the following:
-   - `Meat Lovers`
-   - `Meat Lovers - Exclude Beef`
-   - `Meat Lovers - Extra Bacon`
-   - `Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers`
-5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the `customer_orders` table and add a 2x in front of any relevant ingredients
-   - For example: `"Meat Lovers: 2xBacon, Beef, ... , Salami"`
-6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+- Add a new `demographic` column using the following mapping for the first letter in the `segment` values:
 
-### D. Pricing and Ratings
+| segment | demographic |
+| ------- | ----------- |
+| C       | Couples     |
+| F       | Families    |
 
-1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
-2. What if there was an additional $1 charge for any pizza extras?
-   - Add cheese is $1 extra
-3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
-4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
-   - `customer_id`
-   - `order_id`
-   - `runner_id`
-   - `rating`
-   - `order_time`
-   - `pickup_time`
-   - `Time between order and pickup`
-   - `Delivery duration`
-   - `Average speed`
-   - `Total number of pizzas`
-5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+- Ensure all `null` string values with an `"unknown"` string value in the original `segment` column as well as the new `age_band` and `demographic` columns
+- Generate a new `avg_transaction` column as the `sales` value divided by `transactions` rounded to 2 decimal places for each record
 
-### E. Bonus Questions
+### B. Data Exploration
 
-If Danny wants to expand his range of pizzas - how would this impact the existing data design? Write an `INSERT` statement to demonstrate what would happen if a new `   Supreme` pizza with all the toppings was added to the Pizza Runner menu?
+1. What day of the week is used for each week_date value?
+2. What range of week numbers are missing from the dataset?
+3. How many total transactions were there for each year in the dataset?
+4. What is the total sales for each region for each month?
+5. What is the total count of transactions for each platform
+6. What is the percentage of sales for Retail vs Shopify for each month?
+7. What is the percentage of sales by demographic for each year in the dataset?
+8. Which age_band and demographic values contribute the most to Retail sales?
+9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?
+
+### C. Before & After Analysis
+
+This technique is usually used when we inspect an important event and want to inspect the impact before and after a certain point in time.
+
+Taking the `week_date` value of `2020-06-15` as the baseline week where the Data Mart sustainable packaging changes came into effect.
+
+We would include all `week_date` values for `2020-06-15` as the start of the period **after** the change and the previous `week_date` values would be **before**
+
+Using this analysis approach - answer the following questions:
+
+1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?
+2. What about the entire 12 weeks before and after?
+3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?
+
+### D. Bonus Question
+
+Which areas of the business have the highest negative impact in sales metrics performance in 2020 for the 12 week before and after period?
+
+- `region`
+- `platform`
+- `age_band`
+- `demographic`
+- `customer_type`
+
+Do you have any further recommendations for Danny’s team at Data Mart or any interesting insights based off this analysis?
