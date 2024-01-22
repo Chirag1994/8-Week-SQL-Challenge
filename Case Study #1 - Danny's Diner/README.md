@@ -1,6 +1,6 @@
 # Case Study #1 - Danny's Diner
 
-[Image](Case Study #1 - Danny's Diner/Images/Image1.png)
+![Image](Case Study #1 - Danny's Diner/Images/Image1.png)
 
 ## SQL Queries and Outputs
 
