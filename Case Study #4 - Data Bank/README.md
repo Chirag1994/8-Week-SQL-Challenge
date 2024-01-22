@@ -1,4 +1,4 @@
-# Case Study #2 - Pizza Runner
+# Case Study #3 - Foodie-Fi
 
 <img src="./Images/Image1.png" alt="Image1" width="800" height="800" />
 
@@ -6,7 +6,7 @@
 
 - [Problem Statement](#problem-statement)
 - [Entity Relationship Diagram](#entity-relationship-diagram)
-- [Case Study Questions](#case-study-questions)
+- [SQL Queries and Outputs](#sql-queries-and-outputs)
 
 ## Problem Statement
 
