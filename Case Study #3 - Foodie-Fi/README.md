@@ -20,6 +20,10 @@ Danny created Foodie-Fi with a data driven mindset and wanted to ensure all futu
 
 ## Entity Relationship Diagram
 
+<a id="entity-relationship-diagram"></a>
+
+<img src="./Images/Image2.png" alt="Image2" />
+
 Danny has shared the data design for Foodie-Fi and also short descriptions on each of the database tables - our case study focuses on only 2 tables but there will be a challenge to create a new table for the Foodie-Fi team.
 
 All datasets exist within the foodie_fi database schema - be sure to include this reference within your SQL scripts as you start exploring the data and answering the case study questions.
@@ -77,10 +81,6 @@ When customers churn - they will keep their access until the end of their curren
 | 19          | 2       | 2020-06-29 |
 | 19          | 3       | 2020-08-29 |
 
-<a id="entity-relationship-diagram"></a>
-
-<img src="./Images/Image2.png" alt="Image2" />
-
 ## Case Study Questions
 
 <a id='case-study-questions'></a>
@@ -107,12 +107,7 @@ Try to keep it as short as possible - you may also want to run some sort of join
 
 ### C. Challenge Payment Question
 
-The Foodie-Fi team wants you to create a new payments table for the year 2020 that includes amounts paid by each customer in the subscriptions table with the following requirements:
-
-    - monthly payments always occur on the same day of month as the original start_date of any monthly paid plan
-    - upgrades from basic to monthly or pro plans are reduced by the current paid amount in that month and start immediately
-    - upgrades from pro monthly to pro annual are paid at the end of the current billing period and also starts at the end of the month period
-    - once a customer churns they will no longer make payments
+The Foodie-Fi team wants you to create a new payments table for the year 2020 that includes amounts paid by each customer in the subscriptions table with the following requirements: - monthly payments always occur on the same day of month as the original start_date of any monthly paid plan - upgrades from basic to monthly or pro plans are reduced by the current paid amount in that month and start immediately - upgrades from pro monthly to pro annual are paid at the end of the current billing period and also starts at the end of the month period - once a customer churns they will no longer make payments
 
 Example outputs for this table might look like the following:
 | customer_id | plan_id | plan_name | payment_date | amount | payment_order |
