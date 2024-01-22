@@ -32,7 +32,7 @@ Danny has shared with you 3 key datasets for this case study:
 
 ## Entity Relationship Diagram
 
-<img src="./Images/Image2.png" alt="Image2" width="800" height="800" />
+![Image2](./Images/Image2.png)
 
 ---
 
