@@ -233,9 +233,9 @@ Output:
 | B | 820 |
 | A | 1370 |
 
-# BONUS QUESTIONS:
+## BONUS QUESTIONS:
 
-## Part 1 - Join All The Things: Recreate the table with: customer_id, order_date, product_name, price, member (Y/N) that looks like the below:
+### Part 1 - Join All The Things: Recreate the table with: customer_id, order_date, product_name, price, member (Y/N) that looks like the below:
 
 Desired Table:
 | customer_id | order_date | product_name | price | Member |
@@ -289,9 +289,9 @@ Output:
 | C | 2021-01-01 | ramen | 12 | N |
 | C | 2021-01-07 | ramen | 12 | N |
 
-# BONUS QUESTIONS:
+## BONUS QUESTIONS:
 
-## Part 2 - Rank All The Things: Danny also requires further information about the ranking of customer products, but he purposely does not need the ranking for non-member purchases so he expects null ranking values for the records when customers are not yet part of the loyalty program.:
+### Part 2 - Rank All The Things: Danny also requires further information about the ranking of customer products, but he purposely does not need the ranking for non-member purchases so he expects null ranking values for the records when customers are not yet part of the loyalty program.:
 
 Desired Table:
 | customer_id | order_date | product_name | price | Member | ranking |
