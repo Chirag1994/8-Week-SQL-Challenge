@@ -1,0 +1,237 @@
+## DATA CLEANING pizza_recipes table
+
+```sql
+DROP TABLE IF EXISTS pizza_recipes_temp;
+```
+
+Create Temporary Table
+
+```sql
+CREATE TEMPORARY TABLE pizza_recipes_temp AS
+SELECT pizza_id, SUBSTRING_INDEX(SUBSTRING_INDEX(toppings, ',', n), ',', -1) AS topping_id
+FROM pizza_recipes
+JOIN (
+    SELECT 1 AS n
+    UNION SELECT 2
+    UNION SELECT 3
+    UNION SELECT 4
+    UNION SELECT 5
+    UNION SELECT 6
+    UNION SELECT 7
+    UNION SELECT 8
+    UNION SELECT 9
+    UNION SELECT 10
+) AS numbers ON CHAR_LENGTH(toppings) - CHAR_LENGTH(REPLACE(toppings, ',', '')) >= n - 1
+ORDER BY pizza_id;
+```
+
+Generating a unique row number to identify each record
+
+```sql
+ALTER TABLE customer_orders_temp
+ADD COLUMN record_id INT AUTO_INCREMENT PRIMARY KEY;
+```
+
+Breaking the Extras Column in Customer_Orders_Temp Table
+
+```sql
+DROP TABLE IF EXISTS extrasBreak;
+```
+
+Assuming your original table is named 'customer_orders_temp' and the column is 'extras. Create a temporary table for the exploded extras using a subquery
+
+```sql
+CREATE TEMPORARY TABLE extrasBreak AS
+SELECT record_id, TRIM(value) AS extra_id
+FROM ( SELECT record_id,
+        TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(extras, ',', n.digit + 1), ',', -1)) AS value
+    FROM customer_orders_temp
+    LEFT JOIN (
+        SELECT 0 AS digit UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ) n ON CHAR_LENGTH(extras) - CHAR_LENGTH(REPLACE(extras, ',', '')) >= n.digit
+    WHERE TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(extras, ',', n.digit + 1), ',', -1)) <> ''
+) AS e;
+
+-- Add rows with null or empty values
+INSERT INTO extrasBreak (record_id, extra_id)
+SELECT record_id, NULL AS extra_id
+FROM customer_orders_temp
+WHERE extras IS NULL OR TRIM(extras) = '';
+
+-- Select the final result
+CREATE TABLE extrasBreak_ AS
+SELECT record_id,
+    CASE WHEN extra_id IS NULL THEN '' ELSE extra_id END AS extra_id
+FROM extrasBreak
+ORDER BY record_id, extra_id;
+```
+
+Breaking the Exclusion Column in Customer_Orders_Temp Table
+
+```sql
+DROP TABLE IF EXISTS exclusionsBreak;
+```
+
+Assuming your original table is named 'customer_orders_temp' and the column is 'exclusions'. Create a temporary table for the exploded exclusions using a subquery
+
+```sql
+CREATE TEMPORARY TABLE exclusionsBreak AS
+SELECT record_id, TRIM(value) AS exclusions_id
+FROM ( SELECT record_id,
+        TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(exclusions, ',', n.digit + 1), ',', -1)) AS value
+    FROM customer_orders_temp
+    LEFT JOIN (
+        SELECT 0 AS digit UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ) n ON CHAR_LENGTH(exclusions) - CHAR_LENGTH(REPLACE(exclusions, ',', '')) >= n.digit
+    WHERE TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(exclusions, ',', n.digit + 1), ',', -1)) <> ''
+) AS e;
+
+-- Add rows with null or empty values
+INSERT INTO exclusionsBreak (record_id, exclusions_id)
+SELECT record_id, NULL AS exclusions_id
+FROM customer_orders_temp
+WHERE exclusions IS NULL OR TRIM(exclusions) = '';
+
+-- Select the final result
+CREATE TABLE exclusionsBreak_ AS
+SELECT record_id,
+    CASE WHEN exclusions_id IS NULL THEN '' ELSE exclusions_id END AS exclusions_id
+FROM exclusionsBreak
+ORDER BY record_id, exclusions_id;
+```
+
+### 1. What are the standard ingredients for each pizza?
+
+```sql
+SELECT
+	pizza_names.pizza_id,
+	pizza_names.pizza_name,
+    GROUP_CONCAT(DISTINCT topping_name) AS topping_name_
+FROM pizza_names
+JOIN pizza_recipes_temp ON pizza_names.pizza_id = pizza_recipes.pizza_id
+JOIN pizza_toppings ON pizza_recipes.topping_id = pizza_toppings.topping_id
+GROUP BY pizza_names.pizza_id,pizza_names.pizza_name
+ORDER BY pizza_names.pizza_name;
+```
+
+Output:
+
+### 2. What was the most commonly added extra?
+
+```sql
+WITH cte AS (
+    SELECT order_id,
+    CAST(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(extras, ',', n), ',', -1)) AS UNSIGNED) AS topping_id
+FROM customer_orders
+JOIN ( SELECT 1 AS n UNION SELECT 2
+    -- Add more numbers if needed
+) AS numbers ON CHAR_LENGTH(extras) - CHAR_LENGTH(REPLACE(extras, ',', '')) >= n - 1
+WHERE extras IS NOT NULL
+)
+SELECT topping_name, COUNT(order_id) AS most_common_extras
+    FROM cte
+JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
+GROUP BY topping_name
+LIMIT 1;
+```
+
+Output:
+
+### 3. What was the most common exclusion?
+
+```sql
+WITH cte AS (
+    SELECT order_id,
+    CAST(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(exclusions, ',', n), ',', -1)) AS UNSIGNED) AS topping_id
+FROM customer_orders
+JOIN ( SELECT 1 AS n UNION SELECT 2
+    -- Add more numbers if needed
+) AS numbers ON CHAR_LENGTH(exclusions) - CHAR_LENGTH(REPLACE(exclusions, ',', '')) >= n - 1
+WHERE exclusions IS NOT NULL
+)
+SELECT topping_name, COUNT(order_id) AS most_common_exclusions
+    FROM cte
+JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
+GROUP BY topping_name
+LIMIT 1;
+```
+
+Output:
+
+### 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
+
+    -- Meat Lovers
+    -- Meat Lovers - Exclude Beef
+    -- Meat Lovers - Extra Bacon
+    -- Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+
+```sql
+WITH extras_cte AS (
+SELECT record_id, GROUP_CONCAT('Extra ', PT.topping_name) AS option_text
+FROM extrasBreak_ AS EB JOIN pizza_toppings AS PT ON EB.extra_id = PT.topping_id GROUP BY record_id
+),
+exclusions_cte AS (
+SELECT record_id, GROUP_CONCAT('Exclusion ', PT.topping_name) AS option_text
+FROM exclusionsBreak_ AS EB JOIN pizza_toppings AS PT ON EB.exclusions_id = PT.topping_id
+GROUP BY record_id
+),
+combined_cte AS (
+SELECT * FROM extras_cte UNION SELECT * FROM exclusions_cte
+),
+partial_data_cte AS (
+SELECT CO.record_id, CO.order_id, CO.customer_id, CO.pizza_id, CO.order_time,
+	IFNULL(GROUP_CONCAT(PN.pizza_name, ' - ', option_text), '') AS pizza_details
+FROM customer_orders_temp AS CO LEFT JOIN combined_cte AS CC ON CO.record_id = CC.record_id
+JOIN pizza_names AS PN ON PN.pizza_id = CO.pizza_id
+GROUP BY CO.record_id, CO.order_id, CO.customer_id, CO.pizza_id, CO.order_time
+)
+SELECT PDC.record_id, PDC.order_id, PDC.customer_id, PDC.pizza_id, PDC.order_time,
+	CASE WHEN PDC.pizza_id = '1' AND pizza_details = '' THEN 'MeatLover'
+		 WHEN PDC.pizza_id = '2' AND pizza_details = '' THEN 'Vegetarian' ELSE PDC.pizza_details END AS pizza_detail
+FROM partial_data_cte AS PDC;
+```
+
+Output:
+
+### 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the
+
+    -- customer_orders table and add a 2x in front of any relevant ingredients.
+    -- For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+
+```sql
+WITH pizza_ingredients AS (
+    SELECT CO.record_id, CO.order_id, CO.customer_id, CO.pizza_id, CO.order_time, PN.pizza_name,
+	  CASE WHEN PT.topping_id IN (SELECT extra_id FROM extrasBreak_ AS EB1 WHERE CO.record_id = EB1.record_id)
+      THEN CONCAT('2x ', PT.topping_name) ELSE PT.topping_name END AS ingredients_used
+    FROM customer_orders_temp AS CO JOIN pizza_recipes_temp AS PR ON CO.pizza_id = PR.pizza_id
+    JOIN pizza_toppings AS PT ON PT.topping_id = PR.topping_id
+    JOIN pizza_names AS PN ON PN.pizza_id = CO.pizza_id
+    WHERE PR.topping_id NOT IN (SELECT exclusions_id FROM exclusionsBreak_ AS EB2 WHERE CO.record_id = EB2.record_id)
+)
+SELECT PI.record_id, PI.order_id, PI.customer_id, PI.pizza_id, PI.order_time,CONCAT(PI.pizza_name, ': ',
+        GROUP_CONCAT(ingredients_used ORDER BY ingredients_used)) AS ingredients_used
+FROM pizza_ingredients AS PI
+GROUP BY PI.record_id, PI.order_id, PI.customer_id, PI.pizza_id, PI.order_time, PI.pizza_name
+ORDER BY PI.record_id, PI.order_id, PI.customer_id, PI.pizza_id, PI.order_time;
+```
+
+Output:
+
+### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+
+```sql
+WITH pizza_ingredients AS (
+SELECT CO.order_id, CO.customer_id, PT.topping_name,
+	CASE WHEN PR.topping_id IN (SELECT extra_id FROM extrasBreak_ AS EB1 WHERE CO.record_id = EB1.record_id) THEN 2
+	WHEN PR.topping_id IN (SELECT exclusions_id FROM exclusionsBreak_ AS EB2 WHERE CO.record_id = EB2.record_id) THEN 0
+    ELSE 1 END AS ingredients_used
+FROM customer_orders_temp AS CO JOIN pizza_recipes_temp AS PR
+ON CO.pizza_id = PR.pizza_id JOIN pizza_toppings AS PT
+ON PT.topping_id = PR.topping_id
+)
+SELECT PI.topping_name, SUM(ingredients_used) AS qty_used_of_each_ingredients FROM pizza_ingredients AS PI
+GROUP BY PI.topping_name
+ORDER BY PI.topping_name;
+```
+
+Output:
