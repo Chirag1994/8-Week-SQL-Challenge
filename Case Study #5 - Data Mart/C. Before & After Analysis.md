@@ -55,7 +55,7 @@ FROM sales_calculation_table_before_and_after;
 
 Output:
 
-### 3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?
+### 3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019 for 4 weeks period?
 
 Part 3.1: How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019 for 4 weeks period?
 
