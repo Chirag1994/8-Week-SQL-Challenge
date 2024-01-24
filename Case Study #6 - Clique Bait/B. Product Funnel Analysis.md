@@ -67,9 +67,9 @@ Use temporary table instead of INTO for the final result
 ```sql
 CREATE TEMPORARY TABLE product_information AS
 SELECT
-VATC.\*,
-AB.abandoned,
-PP.purchased
+    VATC.*,
+    AB.abandoned,
+    PP.purchased
 FROM
 view_add_to_cart_cte AS VATC
 JOIN products_abandoned_cte AS AB ON VATC.product_id = AB.product_id
@@ -86,8 +86,7 @@ ORDER BY product_id;
 -- Drop the temporary tables when done
 
 ```sql
-DROP TEMPORARY TABLE IF EXISTS view_add_to_cart_cte, products_abandoned_cte,
-products_purchased_cte;
+DROP TEMPORARY TABLE IF EXISTS view_add_to_cart_cte, products_abandoned_cte, products_purchased_cte;
 ```
 
 Output:
