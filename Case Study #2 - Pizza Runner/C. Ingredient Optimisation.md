@@ -1,28 +1,23 @@
 ## DATA CLEANING pizza_recipes table
 
-Dropping Table if already exists
-
 ```sql
+-- Dropping Table if already exists
 DROP TABLE IF EXISTS pizza_recipes_temp;
-```
 
-Create Temporary Table
-
-```sql
+-- Create Temporary Table
 CREATE TEMPORARY TABLE pizza_recipes_temp AS
 SELECT pizza_id, SUBSTRING_INDEX(SUBSTRING_INDEX(toppings, ',', n), ',', -1) AS topping_id
 FROM pizza_recipes
-JOIN (
-    SELECT 1 AS n
-    UNION SELECT 2
-    UNION SELECT 3
-    UNION SELECT 4
-    UNION SELECT 5
-    UNION SELECT 6
-    UNION SELECT 7
-    UNION SELECT 8
-    UNION SELECT 9
-    UNION SELECT 10
+JOIN (SELECT 1 AS n
+        UNION SELECT 2
+        UNION SELECT 3
+        UNION SELECT 4
+        UNION SELECT 5
+        UNION SELECT 6
+        UNION SELECT 7
+        UNION SELECT 8
+        UNION SELECT 9
+        UNION SELECT 10
 ) AS numbers ON CHAR_LENGTH(toppings) - CHAR_LENGTH(REPLACE(toppings, ',', '')) >= n - 1
 ORDER BY pizza_id;
 ```
@@ -54,13 +49,13 @@ ADD COLUMN record_id INT AUTO_INCREMENT PRIMARY KEY;
 
 Breaking the Extras Column in Customer_Orders_Temp Table
 
-```sql
-DROP TABLE IF EXISTS extrasBreak;
-```
-
 Assuming your original table is named 'customer_orders_temp' and the column is 'extras. Create a temporary table for the exploded extras using a subquery
 
 ```sql
+-- Dropping table if already exists
+DROP TABLE IF EXISTS extrasBreak;
+
+-- Creating a temporary table extrasBreak
 CREATE TEMPORARY TABLE extrasBreak AS
 SELECT record_id, TRIM(value) AS extra_id
 FROM ( SELECT record_id,
@@ -78,7 +73,7 @@ SELECT record_id, NULL AS extra_id
 FROM customer_orders_temp
 WHERE extras IS NULL OR TRIM(extras) = '';
 
--- Select the final result
+-- Creating a temporary table extrasBreak_
 CREATE TABLE extrasBreak_ AS
 SELECT record_id,
     CASE WHEN extra_id IS NULL THEN '' ELSE extra_id END AS extra_id
@@ -108,13 +103,13 @@ Output:
 
 Breaking the Exclusion Column in Customer_Orders_Temp Table
 
-```sql
-DROP TABLE IF EXISTS exclusionsBreak;
-```
-
 Assuming your original table is named 'customer_orders_temp' and the column is 'exclusions'. Create a temporary table for the exploded exclusions using a subquery
 
 ```sql
+-- Dropping table if already exists
+DROP TABLE IF EXISTS exclusionsBreak;
+
+-- Creating a temporary table exclusionsBreak
 CREATE TEMPORARY TABLE exclusionsBreak AS
 SELECT record_id, TRIM(value) AS exclusions_id
 FROM ( SELECT record_id,
@@ -132,7 +127,7 @@ SELECT record_id, NULL AS exclusions_id
 FROM customer_orders_temp
 WHERE exclusions IS NULL OR TRIM(exclusions) = '';
 
--- Select the final result
+-- Creating a temporary table exclusionsBreak_
 CREATE TABLE exclusionsBreak_ AS
 SELECT record_id,
     CASE WHEN exclusions_id IS NULL THEN '' ELSE exclusions_id END AS exclusions_id
@@ -227,10 +222,10 @@ Output:
 
 ### 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
 
-    -- Meat Lovers
-    -- Meat Lovers - Exclude Beef
-    -- Meat Lovers - Extra Bacon
-    -- Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+> -- Meat Lovers
+> -- Meat Lovers - Exclude Beef
+> -- Meat Lovers - Extra Bacon
+> -- Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
 
 ```sql
 WITH extras_cte AS (
@@ -278,8 +273,8 @@ Output:
 
 ### 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the
 
-    -- customer_orders table and add a 2x in front of any relevant ingredients.
-    -- For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+> -- customer_orders table and add a 2x in front of any relevant ingredients.
+> -- For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
 
 ```sql
 WITH pizza_ingredients AS (
