@@ -3,7 +3,7 @@
 Dropping the pizza_recipes_temp table if already exists otherwise creating it.
 
 ```sql
-DROP TABLE IF EXISTS pizza_recipes_temp;
+DROP TABLE IF EXISTS pizza_recipes_temp
 
 CREATE TEMPORARY TABLE pizza_recipes_temp AS
 SELECT pizza_id, SUBSTRING_INDEX(SUBSTRING_INDEX(toppings, ',', n), ',', -1) AS topping_id
@@ -54,7 +54,7 @@ Assuming your original table is named 'customer_orders_temp' and the column is '
 Dropping the extrasBreak, extrasBreak\_ tables if already exists otherwise creating them.
 
 ```sql
-DROP TABLE IF EXISTS extrasBreak, extrasBreak_;
+DROP TABLE IF EXISTS extrasBreak, extrasBreak_
 
 CREATE TEMPORARY TABLE extrasBreak AS
 SELECT record_id, TRIM(value) AS extra_id
@@ -114,7 +114,7 @@ Assuming your original table is named 'customer_orders_temp' and the column is '
 Dropping the exclusionsBreak, exclusionsBreak\_ tables if already exists otherwise creating them.
 
 ```sql
-DROP TABLE IF EXISTS exclusionsBreak;
+DROP TABLE IF EXISTS exclusionsBreak, exclusionsBreak_
 
 CREATE TEMPORARY TABLE exclusionsBreak AS
 SELECT record_id, TRIM(value) AS exclusions_id
