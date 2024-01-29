@@ -272,5 +272,3 @@ Output:
 | Thursday | 3 |
 | Saturday | 5 |
 | Friday | 1 |
-
-[B. Runner and Customer Experience](Case Study #2 - Pizza Runner/B. Runner and Customer Experience.md)
