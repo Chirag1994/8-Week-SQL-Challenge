@@ -2,11 +2,11 @@
 
 ### Cleaning Customer_Orders Table
 
-```sql
--- Dropping table if already exists
-DROP TABLE IF EXISTS customer_orders_temp;
+Dropping the customer_orders_temp table if already exists otherwise creating it.
 
--- Creating a temporary table customer_orders_temp
+```sql
+DROP TABLE IF EXISTS customer_orders_temp
+
 CREATE TEMPORARY TABLE customer_orders_temp AS
 SELECT order_id, customer_id, pizza_id,
 CASE WHEN exclusions IS NULL OR exclusions LIKE 'null' THEN ''
@@ -37,11 +37,11 @@ Output:
 
 ### Cleaning Runner_Orders Table
 
-```sql
--- Dropping table if already exists
-DROP TABLE IF EXISTS runner_orders_temp;
+Dropping the runner_orders_temp table if already exists otherwise creating it.
 
--- Creating a temporary table runner_orders_temp
+```sql
+DROP TABLE IF EXISTS runner_orders_temp
+
 CREATE TEMPORARY TABLE runner_orders_temp AS
 SELECT order_id, runner_id,
     CAST(CASE WHEN pickup_time LIKE "null" THEN NULL ELSE pickup_time END AS DATETIME) AS pickup_time,
