@@ -299,19 +299,22 @@ GROUP BY PI.record_id, PI.order_id, PI.customer_id, PI.pizza_id, PI.order_time, 
 ORDER BY PI.record_id, PI.order_id, PI.customer_id, PI.pizza_id, PI.order_time;
 ```
 
-Output:
-| record_id | order_id | customer_id | pizza_id | order_time | ingredients_used |
-|-----------|----------|-------------|----------|----------------------|----------------------------------------------------------------|
-| 1 | 1 | 101 | 1 | 2020-01-01 18:05:02 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
-| 2 | 2 | 101 | 1 | 2020-01-01 19:00:52 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
-| 3 | 3 | 102 | 1 | 2020-01-02 23:51:23 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
-| 4 | 3 | 102 | 2 | 2020-01-02 23:51:23 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
-| 5 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
-| 6 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
-| 7 | 4 | 103 | 2 | 2020-01-04 13:23:46 | Vegetarian: Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
-| 8 | 5 | 104 | 1 | 2020-01-08 21:00:29 | Meatlovers: 2x Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
-| 9 | 6 | 101 | 2 | 2020-01-08 21:03:13 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
-| 10 | 7 | 105 | 2 | 2020-01-08 21:20
+| record_id | order_id | customer_id | pizza_id | order_time          | ingredients_used                                                                 |
+| --------- | -------- | ----------- | -------- | ------------------- | -------------------------------------------------------------------------------- |
+| 1         | 1        | 101         | 1        | 2020-01-01 18:05:02 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 2         | 2        | 101         | 1        | 2020-01-01 19:00:52 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 3         | 3        | 102         | 1        | 2020-01-02 23:51:23 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 4         | 3        | 102         | 2        | 2020-01-02 23:51:23 | Vegetarian: Cheese,Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes                |
+| 5         | 4        | 103         | 1        | 2020-01-04 13:23:46 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 6         | 4        | 103         | 1        | 2020-01-04 13:23:46 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 7         | 4        | 103         | 2        | 2020-01-04 13:23:46 | Vegetarian: Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes                       |
+| 8         | 5        | 104         | 1        | 2020-01-08 21:00:29 | Meatlovers: 2x Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami    |
+| 9         | 6        | 101         | 2        | 2020-01-08 21:03:13 | Vegetarian: Cheese,Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes                |
+| 10        | 7        | 105         | 2        | 2020-01-08 21:20:29 | Vegetarian: Cheese,Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes                |
+| 11        | 8        | 102         | 1        | 2020-01-09 23:54:33 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 12        | 9        | 103         | 1        | 2020-01-10 11:22:59 | Meatlovers: 2x Bacon,2x Chicken,BBQ Sauce,Beef,Cheese,Mushrooms,Pepperoni,Salami |
+| 13        | 10       | 104         | 1        | 2020-01-11 18:34:49 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami       |
+| 14        | 10       | 104         | 1        | 2020-01-11 18:34:49 | Meatlovers: 2x Bacon,2x Cheese,BBQ Sauce,Beef,Chicken,Mushrooms,Pepperoni,Salami |
 
 ### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 
@@ -331,19 +334,17 @@ ORDER BY PI.topping_name;
 ```
 
 Output:
-| record_id | order_id | customer_id | pizza_id | order_time | ingredients_used |
-|-----------|----------|-------------|----------|-----------------------|-----------------------------------------------------------|
-| 1 | 1 | 101 | 1 | 2020-01-01 18:05:02 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 2 | 2 | 101 | 1 | 2020-01-01 19:00:52 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 3 | 3 | 102 | 1 | 2020-01-02 23:51:23 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 4 | 3 | 102 | 2 | 2020-01-02 23:51:23 | Vegetarian: Cheese,Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes |
-| 5 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 6 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 7 | 4 | 103 | 2 | 2020-01-04 13:23:46 | Vegetarian: Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes |
-| 8 | 5 | 104 | 1 | 2020-01-08 21:00:29 | Meatlovers: 2x Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 9 | 6 | 101 | 2 | 2020-01-08 21:03:13 | Vegetarian: Cheese,Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes |
-| 10 | 7 | 105 | 2 | 2020-01-08 21:20:29 | Vegetarian: Cheese,Mushrooms,Onions,Peppers,Tomato Sauce,Tomatoes |
-| 11 | 8 | 102 | 1 | 2020-01-09 23:54:33 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 12 | 9 | 103 | 1 | 2020-01-10 11:22:59 | Meatlovers: 2x Bacon,2x Chicken,BBQ Sauce,Beef,Cheese,Mushrooms,Pepperoni,Salami |
-| 13 | 10 | 104 | 1 | 2020-01-11 18:34:49 | Meatlovers: Bacon,BBQ Sauce,Beef,Cheese,Chicken,Mushrooms,Pepperoni,Salami |
-| 14 | 10 | 104 | 1 | 2020-01-11 18:34:49 | Meatlovers: 2x Bacon,2x Cheese,BBQ Sauce,Beef,Chicken,Mushrooms,Pepperoni,Salami |
+| topping_name | qty_used_of_each_ingredients |
+|--------------|------------------------------|
+| Bacon | 13 |
+| BBQ Sauce | 10 |
+| Beef | 10 |
+| Cheese | 13 |
+| Chicken | 10 |
+| Mushrooms | 14 |
+| Onions | 4 |
+| Pepperoni | 10 |
+| Peppers | 4 |
+| Salami | 10 |
+| Tomato Sauce | 4 |
+| Tomatoes | 4 |
