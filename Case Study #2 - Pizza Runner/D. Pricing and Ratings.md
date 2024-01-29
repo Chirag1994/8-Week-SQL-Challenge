@@ -71,11 +71,9 @@ Output:
 | 8 | 4 |
 | 10 | 3 |
 
-### 4. Using your newly generated table - can you join all of the information together to form a table which
+### 4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
 
-    -- has the following information for successful deliveries?
-    -- customer_id, order_id, runner_id, rating, order_time, pickup_time, Time between order and pickup
-    -- Delivery duration, Average speed, Total number of pizzas
+> customer_id, order_id, runner_id, rating, order_time, pickup_time, Time between order and pickup, Delivery duration, Average speed, Total number of pizzas.
 
 ```sql
 SELECT
@@ -104,10 +102,7 @@ Output:
 | 102 | 8 | 2 | 4 | 2020-01-09 23:54:33 | 15 | 20 | 93.6 | 1 | 1 |
 | 104 | 10 | 1 | 3 | 2020-01-11 18:34:49 | 10 | 16 | 60 | 2 | 2 |
 
-### 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner
-
-    -- is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over
-    -- after these deliveries?
+### 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
 
 ```sql
 SELECT
