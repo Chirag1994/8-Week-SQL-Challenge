@@ -112,15 +112,15 @@ ORDER BY SUM(CASE WHEN exclusions != '' AND extras != '' THEN 1 ELSE 0 END)  DES
 -- 9. What was the total volume of pizzas ordered for each hour of the day?
 SELECT 
 	HOUR(order_time) as 'hour',
-    COUNT(order_id)
+    COUNT(order_id) order_cnt
 FROM customer_orders_temp
 GROUP BY HOUR(order_time)
 ORDER BY HOUR(order_time);
 
 -- 10. What was the volume of orders for each day of the week?
 SELECT 
-	DAYNAME(order_time) as 'day_of_the_week',
-    COUNT(order_id)
+	DAYNAME(order_time) AS 'day_of_the_week',
+    COUNT(order_id) AS order_cnt
 FROM customer_orders_temp
 GROUP BY DAYNAME(order_time)
 ORDER BY DAYNAME(order_time) DESC;
@@ -142,8 +142,8 @@ FROM runner_orders_temp
 JOIN customer_orders_temp
 ON runner_orders_temp.order_id = customer_orders_temp.order_id
 WHERE runner_orders_temp.distance != 0
-GROUP BY runner_id)
-
+GROUP BY runner_id
+)
 SELECT ROUND(AVG(avg_time),0) AS avg_pick_time
 FROM runners_pick_cte;
 
@@ -251,7 +251,7 @@ ORDER BY record_id, extra_id;
 
 /* -------------- Breaking the Exclusion Column in Customer_Orders_Temp Table -------------- */
 -- Dropping exclusionsBreak table if exists already.
-DROP TABLE IF EXISTS exclusionsBreak;
+DROP TABLE IF EXISTS exclusionsBreak, exclusionsBreak_;
 -- Assuming your original table is named 'customer_orders_temp' and the column is 'exclusions'
 -- Create a temporary table for the exploded exclusions using a subquery
 CREATE TEMPORARY TABLE exclusionsBreak AS
@@ -285,52 +285,40 @@ SELECT
 	pizza_names.pizza_name,
     GROUP_CONCAT(DISTINCT topping_name) AS topping_name_
 FROM pizza_names
-JOIN pizza_recipes_temp ON pizza_names.pizza_id = pizza_recipes.pizza_id
-JOIN pizza_toppings ON pizza_recipes.topping_id = pizza_toppings.topping_id
+JOIN pizza_recipes_temp ON pizza_names.pizza_id = pizza_recipes_temp.pizza_id
+JOIN pizza_toppings ON pizza_recipes_temp.topping_id = pizza_toppings.topping_id
 GROUP BY pizza_names.pizza_id,pizza_names.pizza_name
 ORDER BY pizza_names.pizza_name;
 
 -- 2. What was the most commonly added extra?
-WITH cte AS (SELECT
-    order_id,
+WITH cte AS (
+	SELECT order_id,
     CAST(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(extras, ',', n), ',', -1)) AS UNSIGNED) AS topping_id
-FROM 
-    customer_orders
-JOIN (
-    SELECT 1 AS n
-    UNION SELECT 2
-    -- Add more numbers if needed
+FROM customer_orders
+JOIN ( SELECT 1 AS n
+       UNION SELECT 2
+      -- Add more numbers if needed
 ) AS numbers ON CHAR_LENGTH(extras) - CHAR_LENGTH(REPLACE(extras, ',', '')) >= n - 1
-WHERE
-    extras IS NOT NULL
+WHERE extras IS NOT NULL
 )
-SELECT topping_name,
-	COUNT(order_id) AS most_common_extras
-    FROM cte
-JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
-GROUP BY topping_name
-LIMIT 1; 
+SELECT topping_name, COUNT(order_id) AS most_common_extras
+    FROM cte JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
+GROUP BY topping_name LIMIT 1; 
 
 -- 3. What was the most common exclusion?
-WITH cte AS (SELECT
-    order_id,
+WITH cte AS (
+	SELECT order_id,
     CAST(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(exclusions, ',', n), ',', -1)) AS UNSIGNED) AS topping_id
-FROM
-    customer_orders
-JOIN (
-    SELECT 1 AS n
-    UNION SELECT 2
-    -- Add more numbers if needed
+FROM customer_orders
+JOIN ( SELECT 1 AS n
+	   UNION SELECT 2
+		-- Add more numbers if needed
 ) AS numbers ON CHAR_LENGTH(exclusions) - CHAR_LENGTH(REPLACE(exclusions, ',', '')) >= n - 1
-WHERE
-    exclusions IS NOT NULL
+WHERE exclusions IS NOT NULL
 )
-SELECT topping_name,
-	COUNT(order_id) AS most_common_exclusions
-    FROM cte
-JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
-GROUP BY topping_name
-LIMIT 1; 
+SELECT topping_name, COUNT(order_id) AS most_common_exclusions
+FROM cte JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
+GROUP BY topping_name LIMIT 1; 
 
 -- 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
 	-- Meat Lovers
@@ -474,6 +462,20 @@ JOIN runner_orders_temp AS RO ON CO.order_id = RO.order_id
 JOIN pizza_names AS PN ON CO.pizza_id = PN.pizza_id
 WHERE RO.distance != 0;
 
+-- 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+WITH pizza_ingredients AS (
+SELECT CO.order_id, CO.customer_id, PT.topping_name,
+	CASE WHEN PR.topping_id IN (SELECT extra_id FROM extrasBreak_ AS EB1 WHERE CO.record_id = EB1.record_id) THEN 2
+	WHEN PR.topping_id IN (SELECT exclusions_id FROM exclusionsBreak_ AS EB2 WHERE CO.record_id = EB2.record_id) THEN 0
+    ELSE 1 END AS ingredients_used
+FROM customer_orders_temp AS CO JOIN pizza_recipes_temp AS PR
+ON CO.pizza_id = PR.pizza_id JOIN pizza_toppings AS PT
+ON PT.topping_id = PR.topping_id
+)
+SELECT PI.topping_name, SUM(ingredients_used) AS qty_used_of_each_ingredients FROM pizza_ingredients AS PI
+GROUP BY PI.topping_name
+ORDER BY PI.topping_name;
+
 /* ---------------------- E. Bonus Questions --------------------- */ 
 /* If Danny wants to expand his range of pizzas - how would this impact the existing data design? 
 Write an INSERT statement to demonstrate what would happen if a new Supreme pizza with all the toppings 
@@ -486,3 +488,5 @@ MODIFY COLUMN toppings VARCHAR(50);
 
 INSERT INTO pizza_recipes (pizza_id, toppings)
 VALUES (3, '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12');
+
+SELECT * FROM pizza_recipes;
