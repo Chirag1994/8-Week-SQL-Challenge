@@ -10,6 +10,9 @@ WHERE RO.distance != 0;
 ```
 
 Output:
+| Total_revenue |
+|-----------|
+| 138 |
 
 ### 2. What if there was an additional $1 charge for any pizza extras? (Add cheese is $1 extra)
 
@@ -31,6 +34,9 @@ WHERE RO.distance != 0) AS temp_;
 ```
 
 Output:
+| Total_revenue |
+|-----------|
+| 151 |
 
 ### 3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate
 
@@ -57,6 +63,16 @@ SELECT * FROM ratings;
 ```
 
 Output:
+| order_id | ratings |
+|----------|---------|
+| 1 | 4 |
+| 2 | 3 |
+| 3 | 4 |
+| 4 | 1 |
+| 5 | 5 |
+| 7 | 2 |
+| 8 | 4 |
+| 10 | 3 |
 
 ### 4. Using your newly generated table - can you join all of the information together to form a table which
 
@@ -80,6 +96,16 @@ GROUP BY CO.customer_id, CO.order_id, RO.runner_id, R.ratings, CO.order_time,
 ```
 
 Output:
+| customer_id | order_id | runner_id | ratings | order_time | distance | duration | time_between_order_and_pickup_in_minutes | average_speed_in_kmph | pizza_count |
+|-------------|----------|-----------|---------|-----------------------|----------|----------|-------------------------------------------|-----------------------|-------------|
+| 101 | 1 | 1 | 4 | 2020-01-01 18:05:02 | 32 | 11 | 37.5 | 1 | 1 |
+| 101 | 2 | 1 | 3 | 2020-01-01 19:00:52 | 27 | 10 | 44.44 | 1 | 1 |
+| 102 | 3 | 1 | 4 | 2020-01-02 23:51:23 | 20 | 21 | 40.2 | 2 | 2 |
+| 103 | 4 | 2 | 1 | 2020-01-04 13:23:46 | 40 | 29 | 35.1 | 3 | 3 |
+| 104 | 5 | 3 | 5 | 2020-01-08 21:00:29 | 15 | 10 | 40 | 1 | 1 |
+| 105 | 7 | 2 | 2 | 2020-01-08 21:20:29 | 25 | 10 | 60 | 1 | 1 |
+| 102 | 8 | 2 | 4 | 2020-01-09 23:54:33 | 15 | 20 | 93.6 | 1 | 1 |
+| 104 | 10 | 1 | 3 | 2020-01-11 18:34:49 | 10 | 16 | 60 | 2 | 2 |
 
 ### 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner
 
@@ -99,6 +125,9 @@ WHERE RO.distance != 0;
 ```
 
 Output:
+| Total_revenue | runner_earned_amount | Profit_left_after_paying_to_runners |
+|---------------|----------------------|--------------------------------------|
+| 138 | 64.62 | 73.38 |
 
 ### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 
@@ -118,3 +147,17 @@ ORDER BY PI.topping_name;
 ```
 
 Output:
+| topping_name | qty_used_of_each_ingredients |
+|--------------|------------------------------|
+| Bacon | 13 |
+| BBQ Sauce | 10 |
+| Beef | 10 |
+| Cheese | 13 |
+| Chicken | 10 |
+| Mushrooms | 14 |
+| Onions | 4 |
+| Pepperoni | 10 |
+| Peppers | 4 |
+| Salami | 10 |
+| Tomato Sauce | 4 |
+| Tomatoes | 4 |

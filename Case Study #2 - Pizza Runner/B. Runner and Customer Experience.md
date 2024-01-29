@@ -10,6 +10,12 @@ GROUP BY WEEK(registration_date);
 
 Output:
 
+| week | num_of_runners |
+| ---- | -------------- |
+| 0    | 1              |
+| 1    | 2              |
+| 2    | 1              |
+
 ### 2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
 
 ```sql
@@ -26,6 +32,9 @@ FROM runners_pick_cte;
 ```
 
 Output:
+| avg_pickup_time |
+|-----------|
+| 16 |
 
 ### 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
 
@@ -46,6 +55,11 @@ GROUP BY pizza_order_count;
 ```
 
 Output:
+| pizza_order_cnt | avg_time_to_prepare |
+|------------------|---------------------|
+| 1 | 12.00 |
+| 2 | 18.00 |
+| 3 | 29.00 |
 
 ### 4. What was the average distance travelled for each customer?
 
@@ -60,6 +74,13 @@ GROUP BY customer_orders_temp.customer_id;
 ```
 
 Output:
+| customer_id | avg_distance |
+|-------------|--------------|
+| 101 | 20 |
+| 102 | 16.73 |
+| 103 | 23.4 |
+| 104 | 10 |
+| 105 | 25 |
 
 ### 5. What was the difference between the longest and shortest delivery times for all orders?
 
@@ -69,6 +90,9 @@ FROM runner_orders_temp;
 ```
 
 Output:
+| diff |
+|-----------|
+| 30 |
 
 ### 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
 
@@ -84,6 +108,16 @@ ORDER BY RO.runner_id, RO.order_id ASC;
 ```
 
 Output:
+| runner_id | order_id | average_speed_in_kmph |
+|-----------|----------|------------------------|
+| 1 | 1 | 37.5 |
+| 1 | 2 | 44.44 |
+| 1 | 3 | 40.2 |
+| 1 | 10 | 60 |
+| 2 | 4 | 35.1 |
+| 2 | 7 | 60 |
+| 2 | 8 | 93.6 |
+| 3 | 5 | 40 |
 
 ### 7. What is the successful delivery percentage for each runner?
 
@@ -95,3 +129,8 @@ GROUP BY runner_id;
 ```
 
 Output:
+| runner_id | percentage |
+|-----------|------------|
+| 1 | 100.00 |
+| 2 | 75.00 |
+| 3 | 50.00 |

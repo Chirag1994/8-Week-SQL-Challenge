@@ -25,6 +25,24 @@ JOIN (
 ORDER BY pizza_id;
 ```
 
+Output:
+| pizza_id | topping_id |
+|----------|------------|
+| 1 | 1 |
+| 1 | 2 |
+| 1 | 3 |
+| 1 | 4 |
+| 1 | 5 |
+| 1 | 6 |
+| 1 | 8 |
+| 1 | 10 |
+| 2 | 4 |
+| 2 | 6 |
+| 2 | 7 |
+| 2 | 9 |
+| 2 | 11 |
+| 2 | 12 |
+
 Generating a unique row number to identify each record
 
 ```sql
@@ -66,6 +84,26 @@ FROM extrasBreak
 ORDER BY record_id, extra_id;
 ```
 
+Output:
+| record_id | extra_id |
+|-----------|----------|
+| 1 | |
+| 2 | |
+| 3 | |
+| 4 | |
+| 5 | |
+| 6 | |
+| 7 | |
+| 8 | 1 |
+| 9 | |
+| 10 | 1 |
+| 11 | |
+| 12 | 1 |
+| 12 | 5 |
+| 13 | |
+| 14 | 1 |
+| 14 | 4 |
+
 Breaking the Exclusion Column in Customer_Orders_Temp Table
 
 ```sql
@@ -100,6 +138,25 @@ FROM exclusionsBreak
 ORDER BY record_id, exclusions_id;
 ```
 
+Output:
+| record_id | exclusions_id |
+|-----------|---------------|
+| 1 | |
+| 2 | |
+| 3 | |
+| 4 | |
+| 5 | 4 |
+| 6 | 4 |
+| 7 | 4 |
+| 8 | |
+| 9 | |
+| 10 | |
+| 11 | |
+| 12 | 4 |
+| 13 | |
+| 14 | 2 |
+| 14 | 6 |
+
 ### 1. What are the standard ingredients for each pizza?
 
 ```sql
@@ -115,48 +172,56 @@ ORDER BY pizza_names.pizza_name;
 ```
 
 Output:
+| pizza_id | pizza_name | topping_name |
+|----------|------------|----------------------------------------------|
+| 1 | Meatlovers | Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 2 | Vegetarian | Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
 
 ### 2. What was the most commonly added extra?
 
 ```sql
 WITH cte AS (
-    SELECT order_id,
+	SELECT order_id,
     CAST(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(extras, ',', n), ',', -1)) AS UNSIGNED) AS topping_id
 FROM customer_orders
-JOIN ( SELECT 1 AS n UNION SELECT 2
-    -- Add more numbers if needed
+JOIN ( SELECT 1 AS n
+       UNION SELECT 2
+      -- Add more numbers if needed
 ) AS numbers ON CHAR_LENGTH(extras) - CHAR_LENGTH(REPLACE(extras, ',', '')) >= n - 1
 WHERE extras IS NOT NULL
 )
 SELECT topping_name, COUNT(order_id) AS most_common_extras
-    FROM cte
-JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
-GROUP BY topping_name
-LIMIT 1;
+    FROM cte JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
+GROUP BY topping_name LIMIT 1;
 ```
 
 Output:
+| topping_name | most_common_extras |
+|--------------|--------------------|
+| Bacon | 4 |
 
 ### 3. What was the most common exclusion?
 
 ```sql
 WITH cte AS (
-    SELECT order_id,
+	SELECT order_id,
     CAST(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(exclusions, ',', n), ',', -1)) AS UNSIGNED) AS topping_id
 FROM customer_orders
-JOIN ( SELECT 1 AS n UNION SELECT 2
-    -- Add more numbers if needed
+JOIN ( SELECT 1 AS n
+	   UNION SELECT 2
+		-- Add more numbers if needed
 ) AS numbers ON CHAR_LENGTH(exclusions) - CHAR_LENGTH(REPLACE(exclusions, ',', '')) >= n - 1
 WHERE exclusions IS NOT NULL
 )
 SELECT topping_name, COUNT(order_id) AS most_common_exclusions
-    FROM cte
-JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
-GROUP BY topping_name
-LIMIT 1;
+FROM cte JOIN pizza_toppings ON pizza_toppings.topping_id = cte.topping_id
+GROUP BY topping_name LIMIT 1;
 ```
 
 Output:
+| topping_name | most_common_exclusions |
+|--------------|--------------------|
+| Cheese | 4 |
 
 ### 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
 
@@ -192,6 +257,22 @@ FROM partial_data_cte AS PDC;
 ```
 
 Output:
+| record_id | order_id | customer_id | pizza_id | order_time | pizza_detail |
+|-----------|----------|-------------|----------|----------------------|----------------------------------------------------------------|
+| 1 | 1 | 101 | 1 | 2020-01-01 18:05:02 | MeatLover |
+| 2 | 2 | 101 | 1 | 2020-01-01 19:00:52 | MeatLover |
+| 3 | 3 | 102 | 1 | 2020-01-02 23:51:23 | MeatLover |
+| 4 | 3 | 102 | 2 | 2020-01-02 23:51:23 | Vegetarian |
+| 5 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers - Exclusion Cheese |
+| 6 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers - Exclusion Cheese |
+| 7 | 4 | 103 | 2 | 2020-01-04 13:23:46 | Vegetarian - Exclusion Cheese |
+| 8 | 5 | 104 | 1 | 2020-01-08 21:00:29 | Meatlovers - Extra Bacon |
+| 9 | 6 | 101 | 2 | 2020-01-08 21:03:13 | Vegetarian |
+| 10 | 7 | 105 | 2 | 2020-01-08 21:20:29 | Vegetarian - Extra Bacon |
+| 11 | 8 | 102 | 1 | 2020-01-09 23:54:33 | MeatLover |
+| 12 | 9 | 103 | 1 | 2020-01-10 11:22:59 | Meatlovers - Extra Bacon, Extra Chicken, Meatlovers - Exclusion Cheese |
+| 13 | 10 | 104 | 1 | 2020-01-11 18:34:49 | MeatLover |
+| 14 | 10 | 104 | 1 | 2020-01-11 18:34:49 | Meatlovers - Extra Bacon, Extra Cheese, Meatlovers - Exclusion BBQ Sauce, Exclusion Mushrooms |
 
 ### 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the
 
@@ -216,6 +297,18 @@ ORDER BY PI.record_id, PI.order_id, PI.customer_id, PI.pizza_id, PI.order_time;
 ```
 
 Output:
+| record_id | order_id | customer_id | pizza_id | order_time | ingredients_used |
+|-----------|----------|-------------|----------|----------------------|----------------------------------------------------------------|
+| 1 | 1 | 101 | 1 | 2020-01-01 18:05:02 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 2 | 2 | 101 | 1 | 2020-01-01 19:00:52 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 3 | 3 | 102 | 1 | 2020-01-02 23:51:23 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 4 | 3 | 102 | 2 | 2020-01-02 23:51:23 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 5 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 6 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 7 | 4 | 103 | 2 | 2020-01-04 13:23:46 | Vegetarian: Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 8 | 5 | 104 | 1 | 2020-01-08 21:00:29 | Meatlovers: 2x Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 9 | 6 | 101 | 2 | 2020-01-08 21:03:13 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 10 | 7 | 105 | 2 | 2020-01-08 21:20
 
 ### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 
@@ -235,3 +328,19 @@ ORDER BY PI.topping_name;
 ```
 
 Output:
+| record_id | order_id | customer_id | pizza_id | order_time | ingredients_used |
+|-----------|----------|-------------|----------|----------------------|----------------------------------------------------------------|
+| 1 | 1 | 101 | 1 | 2020-01-01 18:05:02 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 2 | 2 | 101 | 1 | 2020-01-01 19:00:52 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 3 | 3 | 102 | 1 | 2020-01-02 23:51:23 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 4 | 3 | 102 | 2 | 2020-01-02 23:51:23 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 5 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 6 | 4 | 103 | 1 | 2020-01-04 13:23:46 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 7 | 4 | 103 | 2 | 2020-01-04 13:23:46 | Vegetarian: Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 8 | 5 | 104 | 1 | 2020-01-08 21:00:29 | Meatlovers: 2x Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 9 | 6 | 101 | 2 | 2020-01-08 21:03:13 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 10 | 7 | 105 | 2 | 2020-01-08 21:20:29 | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
+| 11 | 8 | 102 | 1 | 2020-01-09 23:54:33 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 12 | 9 | 103 | 1 | 2020-01-10 11:22:59 | Meatlovers: 2x Bacon, 2x Chicken, BBQ Sauce, Beef, Cheese, Mushrooms, Pepperoni, Salami |
+| 13 | 10 | 104 | 1 | 2020-01-11 18:34:49 | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
+| 14 | 10 | 104 | 1 | 2020-01-11 18:34:49 | Meatlovers: 2x Bacon, 2x Cheese, BBQ Sauce, Beef, Chicken, Mushrooms, Pepperoni, Salami |
