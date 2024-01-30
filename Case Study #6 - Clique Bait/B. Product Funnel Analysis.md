@@ -53,7 +53,7 @@ SELECT
     PH.product_id,
     PH.page_name AS product_name,
     PH.product_category,
-    COUNT(\*) AS purchased
+    COUNT(*) AS purchased
 FROM events AS E
 JOIN event_identifier AS EI ON E.event_type = EI.event_type
 JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
@@ -129,7 +129,7 @@ Creating a Temporary table category_products_abandoned
 CREATE TEMPORARY TABLE category_products_abandoned AS
 SELECT
     PH.product_category,
-    COUNT(\*) AS abandoned
+    COUNT(*) AS abandoned
     FROM events AS E
 JOIN event_identifier AS EI ON E.event_type = EI.event_type
 JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
@@ -147,7 +147,7 @@ Creating a Temporary table category_products_purchased
 CREATE TEMPORARY TABLE category_products_purchased AS
 SELECT
     PH.product_category,
-    COUNT(\*) AS purchased
+    COUNT(*) AS purchased
 FROM events AS E
 JOIN event_identifier AS EI ON E.event_type = EI.event_type
 JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
