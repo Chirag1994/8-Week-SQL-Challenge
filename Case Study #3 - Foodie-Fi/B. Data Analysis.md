@@ -186,10 +186,44 @@ Output:
 ### 10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)
 
 ```sql
-
+WITH trial_plan AS (
+  SELECT customer_id, start_date AS trial_date
+  FROM foodie_fi.subscriptions WHERE plan_id = 0
+), annual_plan AS (
+  SELECT
+    customer_id, start_date AS annual_date
+  FROM foodie_fi.subscriptions WHERE plan_id = 3
+), bins AS (
+  -- bins CTE: Put customers in 30-day buckets based on the average number of days taken to upgrade to a pro annual plan.
+  SELECT
+    FLOOR((DATEDIFF(annual.annual_date, trial.trial_date) - 1) / 30) + 1 AS avg_days_to_upgrade
+  FROM trial_plan AS trial
+  JOIN annual_plan AS annual
+    ON trial.customer_id = annual.customer_id
+)
+SELECT
+  CONCAT(((avg_days_to_upgrade - 1) * 30 + 1), ' - ', (avg_days_to_upgrade * 30), ' days') AS day_period_bucket,
+  COUNT(*) AS num_of_customers
+FROM bins
+GROUP BY avg_days_to_upgrade
+ORDER BY avg_days_to_upgrade;
 ```
 
 Output:
+| day_period_bucket | num_of_customers |
+|-------------------|-------------------|
+| 1 - 30 days | 49 |
+| 31 - 60 days | 24 |
+| 61 - 90 days | 34 |
+| 91 - 120 days | 35 |
+| 121 - 150 days | 42 |
+| 151 - 180 days | 36 |
+| 181 - 210 days | 26 |
+| 211 - 240 days | 4 |
+| 241 - 270 days | 5 |
+| 271 - 300 days | 1 |
+| 301 - 330 days | 1 |
+| 331 - 360 days | 1 |
 
 ### 11. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?
 
