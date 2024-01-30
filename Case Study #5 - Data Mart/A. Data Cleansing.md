@@ -47,20 +47,23 @@ LIMIT 15;
 ```
 
 Output:
-| week_date | week_number | month_number | calendar_year | region | platform | age_band | demographic_segment | transactions | avg_transaction | sales |
-|-------------|-------------|--------------|---------------|---------------|----------|-----------------|----------------------|--------------|------------------|-----------|
-| 2020-08-31 | 35 | 8 | 2020 | ASIA | Retail | Retirees | Couples | 120631 | 30.31 | 3656163 |
-| 2020-08-31 | 35 | 8 | 2020 | ASIA | Retail | Young Adults | Families | 31574 | 31.56 | 996575 |
-| 2020-08-31 | 35 | 8 | 2020 | USA | Retail | unknown | unknown | null | 529151 | 31.20 |
-| 2020-08-31 | 35 | 8 | 2020 | EUROPE | Retail | Young Adults | Couples | 4517 | 31.42 | 141942 |
-| 2020-08-31 | 35 | 8 | 2020 | AFRICA | Retail | Middle Aged | Couples | 58046 | 30.29 | 1758388 |
-| 2020-08-31 | 35 | 8 | 2020 | CANADA | Shopify | Middle Aged | Families | 1336 | 182.54 | 243878 |
-| 2020-08-31 | 35 | 8 | 2020 | AFRICA | Shopify | Retirees | Families | 2514 | 206.64 | 519502 |
-| 2020-08-31 | 35 | 8 | 2020 | ASIA | Shopify | Young Adults | Families | 2158 | 172.11 | 371417 |
-| 2020-08-31 | 35 | 8 | 2020 | AFRICA | Shopify | Middle Aged | Families | 318 | 155.84 | 49557 |
-| 2020-08-31 | 35 | 8 | 2020 | AFRICA | Retail | Retirees | Couples | 111032 | 35.02 | 3888162 |
-| 2020-08-31 | 35 | 8 | 2020 | USA | Shopify | Young Adults | Families | 1398 | 186.53 | 260773 |
-| 2020-08-31 | 35 | 8 | 2020 | OCEANIA | Shopify | Middle Aged | Couples | 4661 | 189.38 | 882690 |
-| 2020-08-31 | 35 | 8 | 2020 | SOUTH AMERICA | Retail | Middle Aged | Couples | 1029 | 37.67 | 38762 |
-| 2020-08-31 | 35 | 8 | 2020 | SOUTH AMERICA | Shopify | Retirees | Couples | 6 | 152.83 | 917 |
-| 2020-08-31 | 35 | 8 | 2020 | EUROPE | Shopify | Retirees | Families | 115 | 306.22 | 35215 |
+
+The first 15 records are shown as follows:
+
+| week_date  | week_number | month_number | calendar_year | region        | platform | age_band     | demographic_segment | transactions | avg_transaction | sales   |
+| ---------- | ----------- | ------------ | ------------- | ------------- | -------- | ------------ | ------------------- | ------------ | --------------- | ------- |
+| 2020-08-31 | 35          | 8            | 2020          | ASIA          | Retail   | Retirees     | Couples             | 120631       | 30.31           | 3656163 |
+| 2020-08-31 | 35          | 8            | 2020          | ASIA          | Retail   | Young Adults | Families            | 31574        | 31.56           | 996575  |
+| 2020-08-31 | 35          | 8            | 2020          | USA           | Retail   | unknown      | unknown             | null         | 529151          | 31.20   |
+| 2020-08-31 | 35          | 8            | 2020          | EUROPE        | Retail   | Young Adults | Couples             | 4517         | 31.42           | 141942  |
+| 2020-08-31 | 35          | 8            | 2020          | AFRICA        | Retail   | Middle Aged  | Couples             | 58046        | 30.29           | 1758388 |
+| 2020-08-31 | 35          | 8            | 2020          | CANADA        | Shopify  | Middle Aged  | Families            | 1336         | 182.54          | 243878  |
+| 2020-08-31 | 35          | 8            | 2020          | AFRICA        | Shopify  | Retirees     | Families            | 2514         | 206.64          | 519502  |
+| 2020-08-31 | 35          | 8            | 2020          | ASIA          | Shopify  | Young Adults | Families            | 2158         | 172.11          | 371417  |
+| 2020-08-31 | 35          | 8            | 2020          | AFRICA        | Shopify  | Middle Aged  | Families            | 318          | 155.84          | 49557   |
+| 2020-08-31 | 35          | 8            | 2020          | AFRICA        | Retail   | Retirees     | Couples             | 111032       | 35.02           | 3888162 |
+| 2020-08-31 | 35          | 8            | 2020          | USA           | Shopify  | Young Adults | Families            | 1398         | 186.53          | 260773  |
+| 2020-08-31 | 35          | 8            | 2020          | OCEANIA       | Shopify  | Middle Aged  | Couples             | 4661         | 189.38          | 882690  |
+| 2020-08-31 | 35          | 8            | 2020          | SOUTH AMERICA | Retail   | Middle Aged  | Couples             | 1029         | 37.67           | 38762   |
+| 2020-08-31 | 35          | 8            | 2020          | SOUTH AMERICA | Shopify  | Retirees     | Couples             | 6            | 152.83          | 917     |
+| 2020-08-31 | 35          | 8            | 2020          | EUROPE        | Shopify  | Retirees     | Families            | 115          | 306.22          | 35215   |
