@@ -264,7 +264,33 @@ Output:
 ### 10. What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
 
 ```sql
+WITH products_per_transaction AS (
+    SELECT s.txn_id, pd.product_id, pd.product_name, s.qty,
+        COUNT(pd.product_id) OVER (PARTITION BY txn_id) AS cnt
+    FROM sales s
+    JOIN product_details pd ON s.prod_id = pd.product_id
+), combinations AS (
+    SELECT
+        GROUP_CONCAT(product_id ORDER BY product_id) AS product_ids,
+        GROUP_CONCAT(product_name ORDER BY product_id) AS product_names
+    FROM products_per_transaction
+    WHERE cnt = 3
+    GROUP BY txn_id
+), combination_count AS (
+    SELECT product_ids, product_names, COUNT(*) AS common_combinations
+    FROM combinations
+    GROUP BY product_ids, product_names
+) SELECT product_ids, product_names
+FROM combination_count
+WHERE common_combinations = (SELECT MAX(common_combinations) FROM combination_count);
 
 ```
 
 Output:
+| Product IDs | Product Names |
+|----------------------------------|-----------------------------------------------------------------|
+| 5d267b,c4a632,e31d39 | White Tee Shirt - Mens, Navy Oversized Jeans - Womens, Cream Relaxed Jeans - Womens |
+| b9a74d,c4a632,d5e9a6 | White Striped Socks - Mens, Navy Oversized Jeans - Womens, Khaki Suit Jacket - Womens |
+| 2a2353,2feb6b,c4a632 | Blue Polo Shirt - Mens, Pink Fluro Polkadot Socks - Mens, Navy Oversized Jeans - Womens |
+| 5d267b,c4a632,e83aa3 | White Tee Shirt - Mens, Navy Oversized Jeans - Womens, Black Straight Jeans - Womens |
+| c4a632,c8d436,e83aa3 | Navy Oversized Jeans - Womens, Teal Button Up Shirt - Mens, Black Straight Jeans - Womens |
