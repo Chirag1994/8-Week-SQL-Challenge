@@ -65,11 +65,14 @@ UPDATE data_mart.clean_weekly_sales
 SET segment = 'unknown'
 WHERE segment IS NULL;
 
+-- Displaying the final cleaned table
 SELECT * FROM clean_weekly_sales;
 
 /* ------------------------- 2. Data Exploration ------------------------- */
 -- 1. What day of the week is used for each week_date value?
-SELECT DISTINCT DAYNAME(formatted_week_date) AS Day_Name FROM clean_weekly_sales;
+SELECT 
+	DISTINCT DAYNAME(week_date) AS Day_Name 
+FROM clean_weekly_sales;
 
 -- 2. What range of week numbers are missing from the dataset?
 WITH RECURSIVE NumbersSeries AS (
@@ -88,11 +91,11 @@ WHERE NOT EXISTS (
 );
 
 -- 3. How many total transactions were there for each year in the dataset?
-SELECT calender_year,
+SELECT calendar_year,
 	SUM(transactions) as total_transactions
 FROM clean_weekly_sales
-GROUP BY calender_year
-ORDER BY calender_year;
+GROUP BY calendar_year
+ORDER BY calendar_year;
 
 -- 4. What is the total sales for each region for each month?
 SELECT region, month_number,
@@ -166,77 +169,73 @@ ORDER BY 1,2;
    -- 1. What is the total sales for the 4 weeks before and after 2020-06-15? 
 		 What is the growth or reduction rate in actual values and percentage of sales? */
          
-   SELECT DISTINCT(week_number) AS baseline_week_number FROM clean_weekly_sales
-   WHERE week_date = '2020-06-15' AND calendar_year = '2020';
-   
-   WITH before_and_after_data AS
-   (SELECT week_date,
-		week_number, 
-        SUM(sales) AS total_sales
+   -- Finding out the baseline_week_number
+SELECT DISTINCT(week_number) AS baseline_week_number FROM clean_weekly_sales
+WHERE week_date = '2020-06-15' AND calendar_year = '2020';
+
+-- Total sales for 4 weeks before and after the '2020-06-15'.
+WITH before_and_after_data AS
+(SELECT week_date, week_number, SUM(sales) AS total_sales
         FROM clean_weekly_sales
     WHERE (week_number BETWEEN 20 AND 27) AND (calendar_year = '2020')
     GROUP BY 1,2
     ORDER BY 1,2
-   ),
-   sales_calculation_table_before_and_after AS (
-   SELECT 
-		SUM(CASE WHEN week_number IN (20,21,22,23) THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
+),
+sales_calculation_table_before_and_after AS (
+		SELECT
+        SUM(CASE WHEN week_number IN (20,21,22,23) THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
         SUM(CASE WHEN week_number IN (24,25,26,27) THEN total_sales ELSE 0 END) AS sales_after_baseline_date_value
         FROM before_and_after_data
         )
-    SELECT 
-		sales_before_baseline_date_value, sales_after_baseline_date_value,
+    SELECT
+        sales_before_baseline_date_value, sales_after_baseline_date_value,
         (sales_after_baseline_date_value - sales_before_baseline_date_value) AS difference,
-        ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)/sales_before_baseline_date_value,2) AS pct
-	FROM sales_calculation_table_before_and_after;
+	ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)/sales_before_baseline_date_value,2) AS pct
+    FROM sales_calculation_table_before_and_after;
          
    -- 2. What about the entire 12 weeks before and after?
     WITH before_and_after_data AS
-   (SELECT week_date,
-		week_number, 
-        SUM(sales) AS total_sales
-        FROM clean_weekly_sales
-    WHERE calendar_year = '2020'
-    GROUP BY 1,2
-    ORDER BY 1,2
-   ),
-   sales_calculation_table_before_and_after AS (
-   SELECT 
-		SUM(CASE WHEN week_number < 24 THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
+(SELECT week_date, week_number, SUM(sales) AS total_sales
+    FROM clean_weekly_sales
+WHERE calendar_year = '2020'
+GROUP BY week_date, week_number
+ORDER BY week_date, week_number
+),
+sales_calculation_table_before_and_after AS (
+    SELECT
+        SUM(CASE WHEN week_number < 24 THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
         SUM(CASE WHEN week_number >= 24 THEN total_sales ELSE 0 END) AS sales_after_baseline_date_value
-        FROM before_and_after_data
-        )
-    SELECT 
-		sales_before_baseline_date_value, sales_after_baseline_date_value,
-        (sales_after_baseline_date_value - sales_before_baseline_date_value) AS difference,
-        ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)/sales_before_baseline_date_value,2) AS pct
-	FROM sales_calculation_table_before_and_after;   
+    FROM before_and_after_data)
+SELECT
+    sales_before_baseline_date_value, sales_after_baseline_date_value,
+    (sales_after_baseline_date_value - sales_before_baseline_date_value) AS difference,
+    ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)/sales_before_baseline_date_value,2) AS pct
+FROM sales_calculation_table_before_and_after;   
    
    -- 3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?
    -- Part 3.1: How do the sale metrics for these 2 periods before and after compare with the previous years 
    -- in 2018 and 2019 for 4 weeks period?
 	WITH before_and_after_data AS
-	   (SELECT calendar_year,
-			week_number, 
-			SUM(sales) AS total_sales
-			FROM clean_weekly_sales
-		WHERE (week_number BETWEEN 20 AND 27)
-		GROUP BY 1,2
-		ORDER BY 1,2
-	   ),
-	   sales_calculation_table_before_and_after AS (
-	   SELECT calendar_year,
-			SUM(CASE WHEN week_number IN (20,21,22,23) THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
-			SUM(CASE WHEN week_number IN (24,25,26,27) THEN total_sales ELSE 0 END) AS sales_after_baseline_date_value
-			FROM before_and_after_data
-			GROUP BY calendar_year
-			)
-		SELECT calendar_year, 
-			sales_before_baseline_date_value, sales_after_baseline_date_value,
-			(sales_after_baseline_date_value - sales_before_baseline_date_value) AS difference,
-			ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)
-            /sales_before_baseline_date_value,2) AS pct
-		FROM sales_calculation_table_before_and_after; 
+(SELECT calendar_year, week_number,
+    SUM(sales) AS total_sales
+    FROM clean_weekly_sales
+WHERE (week_number BETWEEN 20 AND 27)
+GROUP BY calendar_year, week_number
+ORDER BY calendar_year, week_number
+),
+sales_calculation_table_before_and_after AS (
+    SELECT calendar_year,
+        SUM(CASE WHEN week_number IN (20,21,22,23) THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
+        SUM(CASE WHEN week_number IN (24,25,26,27) THEN total_sales ELSE 0 END) AS sales_after_baseline_date_value
+    FROM before_and_after_data
+    GROUP BY calendar_year
+    )
+SELECT calendar_year,
+    sales_before_baseline_date_value, sales_after_baseline_date_value,
+    (sales_after_baseline_date_value - sales_before_baseline_date_value) AS difference,
+    ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)
+    /sales_before_baseline_date_value,2) AS pct
+FROM sales_calculation_table_before_and_after; 
    
 -- Part 3.2: How do the sale metrics for these 2 periods before and after compare with the previous years 
 -- in 2018 and 2019 for 12 weeks period?
@@ -272,3 +271,4 @@ ORDER BY 1,2;
    -- customer_type
    Do you have any further recommendations for Danny’s team at Data Mart or any interesting insights 
    based off this analysis? */
+   

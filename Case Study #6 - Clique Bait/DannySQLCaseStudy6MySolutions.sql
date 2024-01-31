@@ -12,14 +12,17 @@ FROM users;
 
 -- 2. How many cookies does each user have on average?
 WITH cookie AS (
-SELECT user_id, COUNT(cookie_id) AS cookie_count FROM users GROUP BY user_id
+SELECT user_id,
+        COUNT(cookie_id) AS cookie_count
+FROM users GROUP BY user_id
 )
-SELECT ROUND(AVG(cookie_count),0) AS average_cookie_per_user FROM cookie;
+SELECT ROUND(AVG(cookie_count),0) AS average_cookie_per_user
+FROM cookie;
 
 -- 3. What is the unique number of visits by all users per month?
-SELECT 
+SELECT
 	MONTH(event_time) AS 'month',
-	COUNT(DISTINCT visit_id)
+	COUNT(DISTINCT visit_id) AS customer_count
 FROM events
 GROUP BY MONTH(event_time);
 
@@ -33,28 +36,30 @@ GROUP BY EI.event_name
 ORDER BY number_of_events DESC;
 
 -- 5. What is the percentage of visits which have a purchase event?
-SELECT 
+SELECT
 	ROUND(100.0 * COUNT(DISTINCT E.visit_id) / (SELECT COUNT(DISTINCT visit_id) FROM events),2)
+    AS vists_percentage
 FROM events AS E
-JOIN event_identifier AS EI
-ON E.event_type = EI.event_type
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
 WHERE EI.event_name = 'Purchase';
 
 -- 6. What is the percentage of visits which view the checkout page but do not have a purchase event?
--- page_hierarchy -> Checkout = 12, events -> and event_type != 3
 
 
 -- 7. What are the top 3 pages by number of views?
 WITH top_3_pages AS
-(SELECT page_id, COUNT(DISTINCT visit_id) AS number_of_views
+(SELECT 
+	page_id, COUNT(DISTINCT visit_id) AS number_of_views
 FROM events
 WHERE event_type = '1'
 GROUP BY page_id
 ORDER BY number_of_views DESC
-LIMIT 3)
-SELECT page_name, number_of_views
-FROM top_3_pages JOIN page_hierarchy
-ON top_3_pages.page_id = page_hierarchy.page_id;
+LIMIT 3
+)
+SELECT 
+	page_name, number_of_views
+FROM top_3_pages
+JOIN page_hierarchy ON top_3_pages.page_id = page_hierarchy.page_id;
 
 -- 8. What is the number of views and cart adds for each product category?
 SELECT PH.product_category, 
@@ -67,8 +72,6 @@ GROUP BY PH.product_category
 ORDER BY PH.product_category;
 
 -- 9. What are the top 3 products by purchases?
--- events -> event_type = 3, page_hierarchy -> page_name
-
 
 
 /* 3. Product Funnel Analysis */
@@ -81,157 +84,140 @@ ORDER BY PH.product_category;
 -- for each product category instead of individual products.
     
 /* PART 1 */ 
--- Use temporary table instead of INTO for CTEs
-CREATE TEMPORARY TABLE view_add_to_cart_cte AS
-SELECT 
-    PH.product_id, 
-    PH.page_name AS product_name, 
+-- Creating a Temporary table view_add_to_cart
+CREATE TEMPORARY TABLE view_add_to_cart AS
+SELECT
+    PH.product_id,
+    PH.page_name AS product_name,
     PH.product_category,
     SUM(CASE WHEN EI.event_name = 'Page View' THEN 1 ELSE 0 END) AS view_counts,
     SUM(CASE WHEN EI.event_name = 'Add to Cart' THEN 1 ELSE 0 END) AS add_to_cart_counts
-FROM 
-    events AS E 
+FROM
+    events AS E
     JOIN event_identifier AS EI ON E.event_type = EI.event_type
-    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id 
-WHERE 
+    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE
     PH.product_category IS NOT NULL
-GROUP BY 
+GROUP BY
     PH.product_id, PH.page_name, PH.product_category;
 
-CREATE TEMPORARY TABLE products_abandoned_cte AS
-SELECT 
-    PH.product_id, 
+-- Creating a Temporary table products_abandoned
+CREATE TEMPORARY TABLE products_abandoned AS
+SELECT
+    PH.product_id,
     PH.page_name AS product_name,
-    PH.product_category, 
+    PH.product_category,
     COUNT(*) AS abandoned
-FROM 
-    events AS E 
-    JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id 
-WHERE 
+FROM
+    events AS E
+    JOIN event_identifier AS EI ON E.event_type = EI.event_type
+    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE
     EI.event_name = 'Add to Cart'
     AND E.visit_id NOT IN (
-        SELECT E.visit_id 
+        SELECT E.visit_id
         FROM events AS E
-        JOIN event_identifier AS EI ON E.event_type = EI.event_type 
+        JOIN event_identifier AS EI ON E.event_type = EI.event_type
         WHERE EI.event_name = 'Purchase'
-    ) 
-GROUP BY 
+    )
+GROUP BY
     PH.product_id, PH.page_name, PH.product_category;
 
-CREATE TEMPORARY TABLE products_purchased_cte AS
-SELECT 
-    PH.product_id, 
+-- Creating a Temporary table products_purchased
+CREATE TEMPORARY TABLE products_purchased AS
+SELECT
+    PH.product_id,
     PH.page_name AS product_name,
-    PH.product_category, 
+    PH.product_category,
     COUNT(*) AS purchased
-FROM 
-    events AS E 
-    JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id 
-WHERE 
-    EI.event_name = 'Add to Cart'
-    AND E.visit_id IN (
-        SELECT E.visit_id 
+FROM events AS E
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE EI.event_name = 'Add to Cart' AND E.visit_id IN (
+        SELECT E.visit_id
         FROM events AS E
-        JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-        WHERE EI.event_name = 'Purchase'
-    ) 
-GROUP BY 
-    PH.product_id, PH.page_name, PH.product_category;
+        JOIN event_identifier AS EI ON E.event_type = EI.event_type
+        WHERE EI.event_name = 'Purchase')
+GROUP BY
+PH.product_id, PH.page_name, PH.product_category;
 
--- Use temporary table instead of INTO for the final result
+-- Creating a Temporary table product_information that combines all the above tables created above.
 CREATE TEMPORARY TABLE product_information AS
-SELECT 
+SELECT
     VATC.*,
-    AB.abandoned, 
+    AB.abandoned,
     PP.purchased
-FROM 
-    view_add_to_cart_cte AS VATC
-    JOIN products_abandoned_cte AS AB ON VATC.product_id = AB.product_id
-    JOIN products_purchased_cte AS PP ON VATC.product_id = PP.product_id;
+FROM
+view_add_to_cart AS VATC
+JOIN products_abandoned AS AB ON VATC.product_id = AB.product_id
+JOIN products_purchased AS PP ON VATC.product_id = PP.product_id;
 
--- Select from the temporary table
+-- Dropping the created temporary tables, since they are not required anymore.
+DROP TEMPORARY TABLE IF EXISTS view_add_to_cart,products_abandoned, products_purchased;
+
+-- Displaying the Final resulting table product_information records..
 SELECT * FROM product_information
 ORDER BY product_id;
 
--- Drop the temporary tables when done
-DROP TEMPORARY TABLE IF EXISTS view_add_to_cart_cte, products_abandoned_cte, 
-products_purchased_cte;
-
 /* PART 2 */ 
 
--- Use temporary table instead of INTO for CTEs
-CREATE TEMPORARY TABLE category_view_add_to_cart_cte AS
-SELECT 
+-- Creating a Temporary table category_view_add_to_cart
+CREATE TEMPORARY TABLE category_view_add_to_cart AS
+SELECT
     PH.product_category,
     SUM(CASE WHEN EI.event_name = 'Page View' THEN 1 ELSE 0 END) AS view_counts,
     SUM(CASE WHEN EI.event_name = 'Add to Cart' THEN 1 ELSE 0 END) AS add_to_cart_counts
-FROM 
-    events AS E 
+FROM events AS E
     JOIN event_identifier AS EI ON E.event_type = EI.event_type
-    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id 
-WHERE 
-    PH.product_category IS NOT NULL
-GROUP BY 
-    PH.product_category;
+    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE PH.product_category IS NOT NULL
+GROUP BY PH.product_category;
 
-CREATE TEMPORARY TABLE category_products_abandoned_cte AS
-SELECT 
-    PH.product_category, 
+-- Creating a Temporary table category_products_abandoned
+CREATE TEMPORARY TABLE category_products_abandoned AS
+SELECT
+    PH.product_category,
     COUNT(*) AS abandoned
-FROM 
-    events AS E 
-    JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id 
-WHERE 
-    EI.event_name = 'Add to Cart'
-    AND E.visit_id NOT IN (
-        SELECT E.visit_id 
+    FROM events AS E
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE EI.event_name = 'Add to Cart' AND E.visit_id NOT IN (
+        SELECT E.visit_id
         FROM events AS E
-        JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-        WHERE EI.event_name = 'Purchase'
-    ) 
-GROUP BY 
-    PH.product_category;
+        JOIN event_identifier AS EI ON E.event_type = EI.event_type
+        WHERE EI.event_name = 'Purchase')
+GROUP BY PH.product_category;
 
-CREATE TEMPORARY TABLE category_products_purchased_cte AS
-SELECT 
-    PH.product_category, 
+-- Creating a Temporary table category_products_purchased
+CREATE TEMPORARY TABLE category_products_purchased AS
+SELECT
+    PH.product_category,
     COUNT(*) AS purchased
-FROM 
-    events AS E 
-    JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-    JOIN page_hierarchy AS PH ON E.page_id = PH.page_id 
-WHERE 
-    EI.event_name = 'Add to Cart'
-    AND E.visit_id IN (
-        SELECT E.visit_id 
-        FROM events AS E
-        JOIN event_identifier AS EI ON E.event_type = EI.event_type 
-        WHERE EI.event_name = 'Purchase'
-    ) 
-GROUP BY 
-    PH.product_category;
+FROM events AS E
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE EI.event_name = 'Add to Cart'
+AND E.visit_id IN (SELECT E.visit_id
+    FROM events AS E
+    JOIN event_identifier AS EI ON E.event_type = EI.event_type
+    WHERE EI.event_name = 'Purchase')
+GROUP BY PH.product_category;
 
--- Use temporary table instead of INTO for the final result
+-- Creating a Temporary table category_product_information that combines all the above tables created above.
 CREATE TEMPORARY TABLE category_product_information AS
-SELECT 
-    VATC.*,
-    AB.abandoned, 
-    PP.purchased
-FROM 
-    category_view_add_to_cart_cte AS VATC
-    JOIN category_products_abandoned_cte AS AB ON VATC.product_category = AB.product_category
-    JOIN category_products_purchased_cte AS PP ON VATC.product_category = PP.product_category;
+SELECT
+    VATC.*, AB.abandoned, PP.purchased
+FROM category_view_add_to_cart AS VATC
+JOIN category_products_abandoned AS AB ON VATC.product_category = AB.product_category
+JOIN category_products_purchased AS PP ON VATC.product_category = PP.product_category;
 
--- Select from the temporary table
-SELECT * FROM category_product_information
+-- Drop the temporary tables, since they are not needed anymore
+DROP TEMPORARY TABLE IF EXISTS category_view_add_to_cart, category_products_abandoned, category_products_purchased;
+
+-- Displaying the final resulting category_product_information table records
+SELECT *
+FROM category_product_information
 ORDER BY product_category;
-    
--- Drop the temporary tables when done
-DROP TEMPORARY TABLE IF EXISTS category_view_add_to_cart_cte, category_products_abandoned_cte, 
-category_products_purchased_cte;
 
 -- Use your 2 new output tables - answer the following questions:
 	-- 1. Which product had the most views, cart adds and purchases?
@@ -261,12 +247,14 @@ category_products_purchased_cte;
     LIMIT 1;
     
     -- 4. What is the average conversion rate from view to cart add?
-	SELECT ROUND(AVG(100.0 * (add_to_cart_counts/view_counts)),2) AS avg_conversion_rate
-    FROM product_information;
+	SELECT 
+		ROUND(AVG(100.0 * (add_to_cart_counts/view_counts)),2) AS avg_conversion_rate
+	FROM product_information;
     
     -- 5. What is the average conversion rate from cart add to purchase?
-	SELECT ROUND(AVG(100.0 * (purchased/add_to_cart_counts)),2) AS avg_conversion_rate
-    FROM product_information;
+	SELECT 
+		ROUND(AVG(100.0 * (purchased/add_to_cart_counts)),2) AS avg_conversion_rate
+	FROM product_information;
     
 /* 4. Campaigns Analysis */
 /* Generate a table that has 1 single row for every unique visit_id record and has the following columns:
