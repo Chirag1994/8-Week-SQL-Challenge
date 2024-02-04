@@ -44,7 +44,17 @@ JOIN event_identifier AS EI ON E.event_type = EI.event_type
 WHERE EI.event_name = 'Purchase';
 
 -- 6. What is the percentage of visits which view the checkout page but do not have a purchase event?
-
+WITH view_purchase AS (
+SELECT 
+	COUNT(E.visit_id) AS visit_count
+FROM events AS E JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE PH.page_name = 'Checkout' and EI.event_name = 'Page View')
+SELECT 
+	ROUND(100 - (100.0 * COUNT(DISTINCT E.visit_id) / 
+		(SELECT visit_count FROM view_purchase)),2) AS pct_of_checkout_visits_not_purchased
+FROM events AS E JOIN event_identifier AS EI ON E.event_type = EI.event_type
+WHERE EI.event_name = 'Purchase';
 
 -- 7. What are the top 3 pages by number of views?
 WITH top_3_pages AS
@@ -72,6 +82,20 @@ GROUP BY PH.product_category
 ORDER BY PH.product_category;
 
 -- 9. What are the top 3 products by purchases?
+SELECT 
+	PH.product_id,
+    PH.page_name,
+    PH.product_category,
+    COUNT(PH.product_id) AS product_count
+FROM events AS E
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON PH.page_id = E.page_id
+WHERE EI.event_name = 'Add to Cart' AND E.visit_id IN
+	(SELECT E.visit_id FROM events as E 
+     JOIN event_identifier AS EI ON E.event_type = EI.event_type WHERE EI.event_name = 'Purchase')
+GROUP BY PH.product_id, PH.page_name, PH.product_category
+ORDER BY product_count DESC
+LIMIT 3;
 
 
 /* 3. Product Funnel Analysis */
@@ -281,3 +305,16 @@ Some ideas you might want to investigate further include:
 	-- What is the uplift in purchase rate when comparing users who click on a campaign impression versus users 
        who do not receive an impression? What if we compare them with users who just an impression but do not click?
 	-- What metrics can you use to quantify the success or failure of each campaign compared to eachother? */
+    
+SELECT 
+	U.user_id, E.visit_id, MIN(E.event_time) AS visit_start_date, C.campaign_name,
+    SUM(CASE WHEN EI.event_name = 'Page View' THEN 1 ELSE 0 END) AS page_view_counts,
+    SUM(CASE WHEN EI.event_name = 'Add to Cart' THEN 1 ELSE 0 END) AS add_to_cart_counts,
+    SUM(CASE WHEN EI.event_name = 'Purchase' THEN 1 ELSE 0 END) AS purchased_counts,
+    SUM(CASE WHEN EI.event_name = 'Ad Impression' THEN 1 ELSE 0 END) AS impression_counts,
+    SUM(CASE WHEN EI.event_name = 'Ad Click' THEN 1 ELSE 0 END) AS click_counts
+FROM users AS U 
+JOIN events AS E ON U.cookie_id = E.cookie_id
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN campaign_identifier AS C ON E.event_time BETWEEN C.start_date AND C.end_date
+GROUP BY U.user_id, E.visit_id, C.campaign_name;
