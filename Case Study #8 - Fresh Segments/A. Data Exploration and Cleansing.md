@@ -148,7 +148,7 @@ WHERE IM1.interest_id = '21246';
 ```
 
 Output:
-| \_month | \_year | month_year | interest_id | composition | index_value | ranking | percentile_ranking | interest_name | interest_summary | created_at | last_modified |
+| _month | _year | month_year | interest_id | composition | index_value | ranking | percentile_ranking | interest_name | interest_summary | created_at | last_modified |
 |--------|-------|-------------|--------------|-------------|-------------|---------|---------------------|------------------------------------|-----------------------------------------------------------|--------------------------|--------------------------|
 | 7 | 2018 | 2018-07-01 | 21246 | 2.26 | 0.65 | 722 | 0.96 | Readers of El Salvadoran Content | People reading news from El Salvadoran media sources. | 2018-06-11 17:50:04 | 2018-06-11 17:50:04 |
 | 8 | 2018 | 2018-08-01 | 21246 | 2.13 | 0.59 | 765 | 0.26 | Readers of El Salvadoran Content | People reading news from El Salvadoran media sources. | 2018-06-11 17:50:04 | 2018-06-11 17:50:04 |
