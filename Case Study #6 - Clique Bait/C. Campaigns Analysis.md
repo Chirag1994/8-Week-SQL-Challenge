@@ -12,14 +12,6 @@
 
 (Optional column) cart_products: a comma separated text value with products added to the cart sorted by the order they were added to the cart (hint: use the sequence_number).
 
-Some ideas you might want to investigate further include:
-
-#### Identifying users who have received impressions during each campaign period and comparing each metric with other users who did not have an impression event
-
-- Does clicking on an impression lead to higher purchase rates?
-- What is the uplift in purchase rate when comparing users who click on a campaign impression versus users who do not receive an impression? What if we compare them with users who just an impression but do not click?
-- What metrics can you use to quantify the success or failure of each campaign compared to eachother?
-
 ```sql
 SELECT
 	U.user_id, E.visit_id, MIN(E.event_time) AS visit_start_date, C.campaign_name,
@@ -59,3 +51,11 @@ First 20 records
 | 18 | 48810d | 2020-02-29 15:26:41 | Half Off - Treat Your Shellf(ish) | 4 | 0 | 0 | 0 | 0 |
 | 19 | fdf383 | 2020-02-11 13:52:24 | Half Off - Treat Your Shellf(ish) | 7 | 1 | 1 | 0 | 0 |
 | 20 | 378a75 | 2020-02-12 23:33:51 | Half Off - Treat Your Shellf(ish) | 4 | 0 | 0 | 0 | 0 |
+
+Some ideas you might want to investigate further include:
+
+#### Identifying users who have received impressions during each campaign period and comparing each metric with other users who did not have an impression event
+
+- Does clicking on an impression lead to higher purchase rates?
+- What is the uplift in purchase rate when comparing users who click on a campaign impression versus users who do not receive an impression? What if we compare them with users who just an impression but do not click?
+- What metrics can you use to quantify the success or failure of each campaign compared to eachother?
