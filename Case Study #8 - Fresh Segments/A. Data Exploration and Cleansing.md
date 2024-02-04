@@ -1,10 +1,11 @@
 ### 1. Update the fresh_segments.interest_metrics table by modifying the month_year column to be a date data type with the start of the month.
 
 We will follow the following steps to solve this question:
-Step 1: Converting month_year column from Varchar(7) -> Varchar(10)
-Step 2: Adding '01-' in front of the month_year column to make it a proper date in every row.
-Step 3: Converting the month_year column into a Date column.
-Step 4: Checking/Displaying the observations.
+
+- Step 1: Converting month_year column from Varchar(7) -> Varchar(10)
+- Step 2: Adding '01-' in front of the month_year column to make it a proper date in every row.
+- Step 3: Converting the month_year column into a Date column.
+- Step 4: Checking/Displaying the observations.
 
 ```sql
 ALTER TABLE interest_metrics MODIFY COLUMN month_year VARCHAR(10)
@@ -69,12 +70,13 @@ Output:
 ### 3. What do you think we should do with these null values in the fresh_segments.interest_metrics.
 
 We will follow the following steps to solve this question:
-Step 1: Checking the null values in every column using the following code.
-Step2: Since the values of composition, index_value, ranking and percentile_ranking columns do not make any sense without knowing the \_month, \_year, month_year & interest_id variables i.e., we cannot perform any analysis on these NULL values of these variables/columns/features. Hence, a wise choice would be to delete them from the interest_metrics table.
+
+- Step 1: Checking the null values in every column using the following code.
+- Step2: Since the values of composition, index_value, ranking and percentile_ranking columns do not make any sense without knowing the \_month, \_year, month_year & interest_id variables i.e., we cannot perform any analysis on these NULL values of these variables/columns/features. Hence, a wise choice would be to delete them from the interest_metrics table.
 
 Do not touch this code: DELETE FROM interest_metrics WHERE interest_id = '21246';
 
-Step 3: Re-Running the code in Step 1 to check.
+- Step 3: Re-Running the code in Step 1 to check.
 
 ```sql
 SELECT * FROM interest_metrics WHERE month_year IS NULL ORDER BY interest_id DESC;
@@ -146,7 +148,7 @@ WHERE IM1.interest_id = '21246';
 ```
 
 Output:
-| _month | _year | month_year | interest_id | composition | index_value | ranking | percentile_ranking | interest_name | interest_summary | created_at | last_modified |
+| \_month | \_year | month_year | interest_id | composition | index_value | ranking | percentile_ranking | interest_name | interest_summary | created_at | last_modified |
 |--------|-------|-------------|--------------|-------------|-------------|---------|---------------------|------------------------------------|-----------------------------------------------------------|--------------------------|--------------------------|
 | 7 | 2018 | 2018-07-01 | 21246 | 2.26 | 0.65 | 722 | 0.96 | Readers of El Salvadoran Content | People reading news from El Salvadoran media sources. | 2018-06-11 17:50:04 | 2018-06-11 17:50:04 |
 | 8 | 2018 | 2018-08-01 | 21246 | 2.13 | 0.59 | 765 | 0.26 | Readers of El Salvadoran Content | People reading news from El Salvadoran media sources. | 2018-06-11 17:50:04 | 2018-06-11 17:50:04 |
