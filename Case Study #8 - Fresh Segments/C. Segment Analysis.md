@@ -40,29 +40,30 @@ Output:
 | Luxury Hotel Guests | 14.1 | 9 |
 | Luxury Retail Researchers | 13.97 | 10 |
 
-```sql
 Bottom 10 interests which have the largest values in any month_year
-    WITH max_composition_cte AS (
-		SELECT
-			month_year,
-			interest_name,
-			MAX(composition) OVER (PARTITION BY interest_id) AS max_composition
-		FROM modified_interest_metrics
-        JOIN interest_map
-        ON modified_interest_metrics.interest_id = interest_map.id
-		WHERE interest_name IS NOT NULL
-        ), composition_rank_cte AS (
-		SELECT
-			*,
-            DENSE_RANK() OVER (ORDER BY max_composition DESC) AS max_composition_ranking
-		FROM max_composition_cte
-    )
-    (SELECT
-		DISTINCT interest_name,
-        max_composition,
-        max_composition_ranking
-        FROM composition_rank_cte
-		ORDER BY max_composition_ranking DESC LIMIT 10);
+
+```sql
+WITH max_composition_cte AS (
+    SELECT
+        month_year,
+        interest_name,
+        MAX(composition) OVER (PARTITION BY interest_id) AS max_composition
+    FROM modified_interest_metrics
+    JOIN interest_map
+    ON modified_interest_metrics.interest_id = interest_map.id
+    WHERE interest_name IS NOT NULL
+    ), composition_rank_cte AS (
+    SELECT
+        *,
+        DENSE_RANK() OVER (ORDER BY max_composition DESC) AS max_composition_ranking
+    FROM max_composition_cte
+)
+(SELECT
+    DISTINCT interest_name,
+    max_composition,
+    max_composition_ranking
+    FROM composition_rank_cte
+    ORDER BY max_composition_ranking DESC LIMIT 10);
 ```
 
 Output:
