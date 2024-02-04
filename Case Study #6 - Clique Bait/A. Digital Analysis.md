@@ -85,7 +85,24 @@ Output:
 
 ### 6. What is the percentage of visits which view the checkout page but do not have a purchase event?
 
+```sql
+WITH view_purchase AS (
+SELECT
+	COUNT(E.visit_id) AS visit_count
+FROM events AS E JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON E.page_id = PH.page_id
+WHERE PH.page_name = 'Checkout' and EI.event_name = 'Page View')
+SELECT
+	ROUND(100 - (100.0 * COUNT(DISTINCT E.visit_id) /
+		(SELECT visit_count FROM view_purchase)),2) AS pct_of_checkout_visits_not_purchased
+FROM events AS E JOIN event_identifier AS EI ON E.event_type = EI.event_type
+WHERE EI.event_name = 'Purchase';
+```
+
 Output:
+| pct_of_checkout_visits_not_purchased |
+|------------------------|
+| 15.50 |
 
 ### 7. What are the top 3 pages by number of views?
 
@@ -134,4 +151,26 @@ Output:
 
 ### 9. What are the top 3 products by purchases?
 
+```sql
+SELECT
+	PH.product_id,
+    PH.page_name,
+    PH.product_category,
+    COUNT(PH.product_id) AS product_count
+FROM events AS E
+JOIN event_identifier AS EI ON E.event_type = EI.event_type
+JOIN page_hierarchy AS PH ON PH.page_id = E.page_id
+WHERE EI.event_name = 'Add to Cart' AND E.visit_id IN
+	(SELECT E.visit_id FROM events as E
+     JOIN event_identifier AS EI ON E.event_type = EI.event_type WHERE EI.event_name = 'Purchase')
+GROUP BY PH.product_id, PH.page_name, PH.product_category
+ORDER BY product_count DESC
+LIMIT 3;
+```
+
 Output:
+| product_id | product_name | product_category | product_count |
+|------------|--------------|-------------------|---------------|
+| 7 | Lobster | Shellfish | 754 |
+| 9 | Oyster | Shellfish | 726 |
+| 8 | Crab | Shellfish | 719 |
