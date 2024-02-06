@@ -187,6 +187,14 @@ Output:
 | B | ramen | 2 |
 | C | ramen | 3 |
 
+#### Analysis of Most Popular Item for Each Customer
+
+1. **Customer-Specific Preferences**:
+
+   - Customer A's most popular item is "ramen," with a total of 3 orders, indicating a preference for this menu item.
+   - Customer B has multiple most popular items, including "curry," "sushi," and "ramen," each with 2 orders, suggesting diverse preferences.
+   - Customer C's most popular item is also "ramen," with 3 orders, indicating a consistent preference for this menu item.
+
 ### 6. Which item was purchased first by the customer after they became a member?
 
 ```sql
@@ -212,6 +220,13 @@ Output:
 |-------------|--------------|
 | A | ramen |
 | B | sushi |
+
+#### Analysis of First Item Purchased by Customers After Becoming a Member
+
+1. **Membership Engagement**:
+
+   - Customer A's first purchase after becoming a member was "ramen," indicating their choice of menu item soon after joining the loyalty program.
+   - Customer B's initial purchase post-membership was "sushi," suggesting a different menu preference compared to Customer A.
 
 ### 7. Which item was purchased just before the customer became a member?
 
@@ -240,6 +255,13 @@ Output:
 | A | curry |
 |B | sushi |
 
+#### Analysis of Last Item Purchased Before Becoming a Member
+
+1. **Pre-Membership Purchases**:
+
+   - Customer A's last purchases before becoming a member were "sushi" and "curry," indicating their menu preferences just before joining the loyalty program.
+   - Customer B's final purchase before membership was also "sushi," suggesting their menu choice before becoming a member.
+
 ### 8. What is the total items and amount spent for each member before they became a member?
 
 ```sql
@@ -260,6 +282,13 @@ Output:
 |-------------|------------------------|--------------|
 | A | 2 | 25 |
 | B | 3 | 40 |
+
+#### Analysis of Total Items and Amount Spent Before Becoming a Member
+
+1. **Pre-Membership Purchases Overview**:
+
+   - Customer A made a total of 2 purchases before becoming a member, with a corresponding total amount spent of $25.
+   - Customer B made 3 purchases before joining the loyalty program, amounting to a total expenditure of $40.
 
 ### 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier how many points would each customer have?
 
@@ -284,6 +313,14 @@ Output:
 | A | 860 |
 | B | 940 |
 | C | 360 |
+
+#### Analysis of Loyalty Points Earned by Customers
+
+1. **Total Loyalty Points Earned**:
+
+   - Customer A has earned a total of 860 loyalty points based on their purchases.
+   - Customer B has accumulated 940 loyalty points, indicating a higher level of engagement with the loyalty program.
+   - Customer C has earned 360 loyalty points, reflecting their lower spending and engagement compared to other customers.
 
 ### 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi how many points do customer A and B have at the end of January?
 
@@ -311,6 +348,13 @@ Output:
 |-------------|--------------|
 | B | 820 |
 | A | 1370 |
+
+#### Analysis of Loyalty Points Earned in January with 2x Points Promotion
+
+1. **Total Points Earned in January**:
+
+   - Customer A has earned a total of 1370 loyalty points by the end of January, taking advantage of the 2x points promotion in the first week after joining the program.
+   - Customer B has accumulated 820 loyalty points by the end of January, also benefiting from the promotional offer during the first week.
 
 ## BONUS QUESTIONS:
 
