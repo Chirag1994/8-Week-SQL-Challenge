@@ -92,6 +92,13 @@ Output:
 |-----------|
 | 14 |
 
+#### Analysis of Total Pizzas Ordered
+
+1. **Pizza Order Overview**:
+
+   - A total of 14 pizzas were ordered during the period under consideration.
+   - Understanding the volume of pizza orders helps in assessing demand and operational requirements for Pizza Runner.
+
 ### 2. How many unique customer orders were made?
 
 ```sql
@@ -103,6 +110,13 @@ Output:
 | unique_orders |
 |-----------|
 | 10 |
+
+#### Analysis of Unique Customer Orders
+
+1. **Insights into Customer Order Frequency**:
+
+   - A total of 10 unique customer orders were made during the specified period.
+   - Understanding the frequency of unique orders provides insights into customer engagement and the overall demand for Pizza Runner's services.
 
 ### 3. How many successful orders were delivered by each runner?
 
@@ -122,6 +136,14 @@ Output:
 | 2 | 3 |
 | 3 | 1 |
 
+#### Analysis of Successful Deliveries by Runners
+
+1. **Efficiency in Order Delivery**:
+
+   - Runner 1 completed the highest number of successful deliveries, with a total of 4 orders fulfilled.
+   - Runner 2 follows closely behind, with 3 successful deliveries.
+   - Runner 3 completed 1 successful delivery during the specified period.
+
 ### 4. How many of each type of pizza was delivered?
 
 ```sql
@@ -140,6 +162,13 @@ Output:
 |-------------|-----------|
 | Meatlovers | 9 |
 | Vegetarian | 3 |
+
+#### Analysis of Pizza Deliveries by Type
+
+1. **Distribution of Pizza Types**:
+
+   - Meat Lovers pizza was the most frequently delivered, with a total of 9 orders fulfilled.
+   - Vegetarian pizza accounted for a smaller portion of deliveries, with 3 orders fulfilled.
 
 ### 5. How many Vegetarian and Meatlovers were ordered by each customer?
 
@@ -165,6 +194,15 @@ Output:
 | 103 | Vegetarian | 1 |
 | 104 | Meatlovers | 3 |
 | 105 | Vegetarian | 1 |
+
+#### Analysis of Pizza Orders by Customer
+
+1. **Customer Pizza Preferences**:
+
+   - Customer 101 ordered 2 Meatlovers pizzas and 1 Vegetarian pizza, indicating a preference for both varieties.
+   - Similarly, Customer 102 ordered 2 Meatlovers pizzas and 1 Vegetarian pizza, suggesting a balanced preference for different pizza types.
+   - Customer 103 predominantly ordered Meatlovers pizzas, with 3 orders, and also ordered 1 Vegetarian pizza, indicating a preference for meat-based options but also an interest in vegetarian choices.
+   - Customer 104 ordered 3 Meatlovers pizzas, indicating a strong preference for this type, while Customer 105 ordered 1 Vegetarian pizza, suggesting a preference for meat-free options.
 
 ### 6. What was the maximum number of pizzas delivered in a single order?
 
@@ -192,6 +230,14 @@ Output:
 | 8 | 1 |
 | 9 | 1 |
 
+#### Analysis of Maximum Pizzas Delivered in a Single Order
+
+1. **Order Size Overview**:
+
+   - Order ID 4 recorded the highest number of pizzas delivered in a single order, with 3 pizzas.
+   - Orders 3 and 10 followed, each consisting of 2 pizzas, indicating moderate order sizes.
+   - Several orders, including IDs 1, 2, 5, 6, 7, 8, and 9, were comprised of a single pizza, representing smaller order sizes.
+
 ### 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 
 ```sql
@@ -214,6 +260,15 @@ Output:
 | 104 | 2 | 1 |
 | 105 | 1 | 0 |
 
+#### Analysis of Pizza Orders with Changes
+
+1. **Change vs. No Change**:
+
+   - Customer 101 and Customer 102 placed orders without any modifications, indicating a preference for standard pizza options without exclusions or extras.
+   - Customer 103 exclusively ordered pizzas with modifications, suggesting a preference for customized or personalized options tailored to specific dietary preferences or taste preferences.
+   - Customer 104 had a mix of orders with and without changes, indicating a varied preference for both standard and customized pizza options.
+   - Customer 105 ordered pizzas with at least one change, reflecting a preference for personalized pizza options.
+
 ### 8. How many pizzas were delivered that had both exclusions and extras?
 
 ```sql
@@ -232,6 +287,12 @@ Output:
 | customer_id | pizza_with_exclusions_and_extras |
 |-------------|---------------------------------|
 | 104 | 1 |
+
+#### Analysis of Pizza Orders with Both Exclusions and Extras
+
+1. **Pizza Customization Trends**:
+
+   - Customer 104 placed an order that included both exclusions and extras, indicating a preference for a customized pizza with specific modifications to the standard recipe.
 
 ### 9. What was the total volume of pizzas ordered for each hour of the day?
 
@@ -254,6 +315,13 @@ Output:
 | 21 | 3 |
 | 23 | 3 |
 
+#### Analysis of Pizza Orders by Hour
+
+1. **Peak Ordering Hours**:
+
+   - Pizza orders exhibit fluctuations throughout the day, with distinct peaks during specific hours.
+   - The busiest hours for pizza orders are observed between 1 PM and 3 PM, with a total volume of 3 orders during each hour.
+
 ### 10. What was the volume of orders for each day of the week?
 
 ```sql
@@ -272,3 +340,12 @@ Output:
 | Thursday | 3 |
 | Saturday | 5 |
 | Friday | 1 |
+
+#### Analysis of Pizza Orders by Day of the Week
+
+1. **Weekday vs. Weekend Orders**:
+
+   - Pizza orders exhibit variations based on the day of the week, with distinct patterns observed between weekdays and weekends.
+   - Wednesdays and Saturdays emerge as the busiest days for pizza orders, with 5 orders recorded on each day.
+   - Thursdays also demonstrate moderate order volume, with 3 orders placed, indicating consistent demand mid-week.
+   - Fridays recorded the lowest order volume, with only 1 order registered, suggesting a dip in demand at the end of the workweek.
