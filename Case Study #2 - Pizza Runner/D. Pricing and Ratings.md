@@ -14,6 +14,20 @@ Output:
 |-----------|
 | 138 |
 
+#### Analysis of Pizza Runner's Revenue
+
+1. **Revenue Overview**:
+
+   - Total Revenue: $138
+
+2. **Revenue Contribution**:
+
+   - Meat Lovers pizzas, priced at $12 each, contributed significantly to Pizza Runner's revenue, generating a substantial portion of the total revenue.
+
+3. **Pricing Strategy**:
+
+   - The pricing strategy of offering Meat Lovers and Vegetarian pizzas at $12 and $10, respectively, appears to align with customer preferences and market demand. The differential pricing reflects the perceived value of the pizzas and encourages customers to opt for higher-priced options.
+
 ### 2. What if there was an additional $1 charge for any pizza extras? (Add cheese is $1 extra)
 
 ```sql
@@ -37,6 +51,16 @@ Output:
 | Total_revenue |
 |-----------|
 | 151 |
+
+#### Analysis of Pizza Runner's Revenue with Extra Charge for Pizza Extras
+
+1. **Revenue Overview:**:
+
+   - Total Revenue with Extra Charge: $151
+
+2. **Impact of Extra Charge**:
+
+   - Introducing an additional $1 charge for pizza extras, particularly for adding cheese, resulted in a slight increase in total revenue compared to the previous scenario.
 
 ### 3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
 
@@ -121,6 +145,20 @@ Output:
 |---------------|----------------------|--------------------------------------|
 | 138 | 64.62 | 73.38 |
 
+#### Profit Analysis for Pizza Runner Deliveries
+
+1. **Revenue Generation**:
+
+   - The total revenue generated from delivering pizzas, considering fixed prices for Meat Lovers and Vegetarian pizzas, amounts to $138.
+
+2. **Runner Expenses**:
+
+   - Runners are compensated at a rate of $0.30 per kilometer traveled. The total amount paid to runners for delivering pizzas is $64.62.
+
+3. **Profit Analysis**:
+
+   - After deducting the expenses incurred for paying runners from the total revenue generated, Pizza Runner has a profit of $73.38 left over from these deliveries.
+
 ### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 
 ```sql
@@ -153,3 +191,12 @@ Output:
 | Salami | 10 |
 | Tomato Sauce | 4 |
 | Tomatoes | 4 |
+
+#### Ingredient Usage Analysis for Delivered Pizzas
+
+1. **Top Ingredients**:
+
+   - Mushrooms: With a total quantity of 14 units, mushrooms emerge as the most commonly used ingredient in delivered pizzas.
+   - Bacon and Cheese: Bacon and cheese tie for the second position, each with a total quantity of 13 units.
+   - BBQ Sauce, Beef, Chicken, Pepperoni, and Salami: These ingredients have a total quantity of 10 units each, indicating their popularity among the pizza toppings.
+   - Onions, Peppers, Tomato Sauce, and Tomatoes: These ingredients have a relatively lower total quantity, each appearing four times in the delivered pizzas.

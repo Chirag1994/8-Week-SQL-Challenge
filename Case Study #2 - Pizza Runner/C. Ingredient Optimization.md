@@ -186,6 +186,20 @@ Output:
 | 1 | Meatlovers | Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami |
 | 2 | Vegetarian | Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes |
 
+#### Analysis of Standard Ingredients for Each Pizza
+
+1. **Pizza Ingredients Overview**:
+
+   A. **Meatlovers Pizza**:
+
+   - Standard ingredients for Meatlovers pizza include Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, and Salami.
+   - These ingredients typically cater to customers who prefer meat-based toppings on their pizzas.
+
+   B. **Vegetarian Pizza**:
+
+   - Standard ingredients for Vegetarian pizza consist of Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, and Tomatoes.
+   - This pizza variant is suitable for customers who prefer vegetarian options, offering a mix of flavorful vegetables and cheese.
+
 ### 2. What was the most commonly added extra?
 
 ```sql
@@ -208,6 +222,12 @@ Output:
 |--------------|--------------------|
 | Bacon | 4 |
 
+#### Analysis of Most Commonly Added Extra
+
+1. **Most Common Extra Topping**:
+
+   - Bacon: The data reveals that bacon is the most frequently added extra topping by customers, with a count of 4 orders.
+
 ### 3. What was the most common exclusion?
 
 ```sql
@@ -229,6 +249,12 @@ Output:
 | topping_name | most_common_exclusions |
 |--------------|--------------------|
 | Cheese | 4 |
+
+#### Analysis of Most Common Exclusion
+
+1. **Most Common Exclusion**:
+
+   - Cheese: The analysis reveals that cheese is the most frequently excluded ingredient, with a count of 4 orders.
 
 ### 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
 
@@ -348,3 +374,15 @@ Output:
 | Salami | 10 |
 | Tomato Sauce | 4 |
 | Tomatoes | 4 |
+
+#### Analysis of Total Ingredient Usage in Pizzas
+
+1. **Ingredient Usage Overview**:
+
+   - Mushrooms: Mushrooms emerge as the most frequently used ingredient, with a total quantity of 14 units across all delivered pizzas.
+
+   - Bacon, Cheese: Bacon and cheese follow closely behind, with both ingredients utilized in 13 units of pizzas each.
+
+   - BBQ Sauce, Beef, Chicken, Pepperoni, Salami: These ingredients are also commonly used, each appearing in 10 units of pizzas.
+
+   - Onions, Peppers, Tomato Sauce, Tomatoes: These ingredients have a relatively lower usage frequency, each appearing in 4 units of pizzas.
