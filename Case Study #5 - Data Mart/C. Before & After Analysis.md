@@ -33,6 +33,13 @@ The Baseline week_number is `24`.
 | -------------------------------- | ------------------------------- | ---------- | ----- |
 | 2345878357                       | 2318994169                      | -26884188  | -1.15 |
 
+#### Total Sales Comparison: 4 Weeks Before and After 2020-06-15
+
+1. **Insights**:
+
+   - The total sales decreased by approximately $26.88 million after the baseline date compared to the four weeks before.
+   - This corresponds to a reduction of approximately 1.15% in sales during the four weeks after the baseline date compared to the four weeks before.
+
 ### 2. What about the entire 12 weeks before and after?
 
 ```sql
@@ -59,6 +66,13 @@ Output:
 | sales_before_baseline_date_value | sales_after_baseline_date_value | difference | pct |
 | -------------------------------- | ------------------------------- | ---------- | ----- |
 | 7126273147 | 6973947753 | -152325394 | -2.14 |
+
+#### Total Sales Comparison: 12 Weeks Before and After 2020-06-15
+
+1. **Insights**:
+
+   - The total sales decreased by approximately $152.33 million over the entire 12 weeks after the baseline date compared to the 12 weeks before.
+   - This corresponds to a reduction of approximately 2.14% in sales during the 12 weeks after the baseline date compared to the 12 weeks before.
 
 ### 3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019 for 4 weeks period?
 
@@ -95,6 +109,12 @@ Output:
 | 2019 | 2249989796 | 2252326390 | 2336594 | 0.10 |
 | 2020 | 2345878357 | 2318994169 | -26884188 | -1.15 |
 
+#### Sale Metrics Comparison: 4 Weeks Before and After 2020-06-15 Across Years (2018, 2019, and 2020)
+
+1. **Overall Trend**:
+
+   - While there were slight increases in sales in the 4 weeks after compared to before for both 2018 and 2019, there was a noticeable decrease in sales in 2020, indicating a negative impact on sales during this period compared to previous years.
+
 ### Part 3.2: How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019 for 12 weeks period?
 
 ```sql
@@ -125,3 +145,9 @@ Output:
 | 2018 | 6396562317 | 6500818510 | 104256193 | 1.63 |
 | 2019 | 6883386397 | 6862646103 | -20740294 | -0.30 |
 | 2020 | 7126273147 | 6973947753 | -152325394 | -2.14 |
+
+#### Sale Metrics Comparison: 12 Weeks Before and After 2020-06-15 Across Years (2018, 2019, and 2020)
+
+1. **Overall Trend**:
+
+   - While there was a significant increase in sales in 2018 and a slight decrease in 2019, 2020 saw a notable decrease in sales during this period compared to previous years. This suggests a significant negative impact on sales in 2020 compared to earlier years.
