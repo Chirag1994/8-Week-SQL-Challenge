@@ -11,6 +11,12 @@ Output:
 |----------|
 | Monday |
 
+#### Day of the Week Analysis for Weekly Sales Data
+
+1. **Insight**:
+
+   - The day of the week associated with each week_date value in the weekly_sales dataset is consistently Monday.
+
 ### 2. What range of week numbers are missing from the dataset?
 
 ```sql
@@ -62,6 +68,12 @@ Output:
 | 51 |
 | 52 |
 
+#### Missing Week Numbers in the Dataset
+
+1. **Insight**:
+
+   - Several week numbers are missing from the dataset, ranging from week 1 to week 11 and week 36 to week 52.
+
 ### 3. How many total transactions were there for each year in the dataset?
 
 ```sql
@@ -78,6 +90,12 @@ Output:
 | 2018 | 346,406,460 |
 | 2019 | 365,639,285 |
 | 2020 | 375,813,651 |
+
+#### Total Transactions by Year
+
+1. **Insight**:
+
+   - The total number of transactions has shown a consistent upward trend over the years, with 2018 starting at a lower value compared to subsequent years.
 
 ### 4. What is the total sales for each region for each month?
 
@@ -142,6 +160,38 @@ Output:
 | USA | 8 | 712,002,790 |
 | USA | 9 | 110,532,368 |
 
+#### Total Sales by Region and Month
+
+1. **Insight**:
+
+   - Sales performance varies across regions and months, with some regions consistently outperforming others.
+
+2. **Overview**:
+
+   - Africa: Shows a consistent increase in sales from March to July before a slight decline in August and September.
+   - Asia: Exhibits a similar trend to Africa, with increasing sales until July followed by a slight decrease in August and September.
+   - Canada: Sales follow a pattern similar to Africa and Asia, with a peak in July followed by a decline in August and September.
+   - Europe: Shows a steady increase in sales from March to July, followed by a slight decrease in August and September.
+   - Oceania: Shows the highest sales among all regions, with a peak in July followed by a decline in August and September.
+   - South America: Sales follow a similar pattern to other regions, with a peak in July followed by a decline in August and September.
+   - USA: Shows a consistent increase in sales from March to July before a slight decline in August and September.
+
+3. **Regional Variations**:
+
+   - Oceania: consistently records the highest sales, indicating strong demand or market presence in that region.
+   - Europe: Reports the lowest sales compared to other regions, suggesting potential opportunities for growth or market penetration strategies.
+
+4. **Seasonal Trends**:
+
+   - The months of March to July generally witness higher sales across all regions, suggesting potential seasonal factors or marketing campaigns driving increased consumer spending during this period.
+   - The decline in sales observed in August and September across most regions could be attributed to seasonal factors, economic conditions, or specific market dynamics.
+
+5. **Recommendations**:
+
+   - Data Mart should analyze the factors contributing to the peak sales months to identify successful strategies and replicate them in other periods or regions.
+   - Targeted marketing campaigns or promotions could be implemented during periods of lower sales to stimulate demand and boost revenue.
+   - Understanding regional preferences and consumer behavior can help tailor marketing strategies and product offerings to maximize sales potential in each market.
+
 ### 5. What is the total count of transactions for each platform?
 
 ```sql
@@ -157,6 +207,22 @@ Output:
 |----------|---------------------|
 | Retail | 1,081,934,227 |
 | Shopify | 5,925,169 |
+
+#### Total Transactions by Platform
+
+1. **Insight**:
+
+   - The majority of transactions occur through the Retail platform compared to the Shopify platform.
+
+2. **Observations**:
+
+   - The higher transaction count on the Retail platform suggests a strong presence in physical retail locations or a larger customer base utilizing traditional retail channels.
+   - The lower transaction count on the Shopify platform may indicate a smaller but growing segment of customers preferring online shopping experiences.
+
+3. **Opportunities**:
+
+   - Data Mart could focus on enhancing its online platform to capture a larger share of the digital market and compete more effectively with traditional retail channels.
+   - Leveraging data analytics and customer insights from both platforms can help optimize marketing strategies and product offerings to target specific customer segments more effectively.
 
 ### 6. What is the percentage of sales for Retail vs Shopify for each month?
 
@@ -199,6 +265,12 @@ Output:
 | 2020 | 7 | 96.67 | 3.33 |
 | 2020 | 8 | 96.51 | 3.49 |
 
+#### Total Transactions by Platform
+
+1. **Insight**:
+
+   - The percentage of sales from the Retail platform consistently dominates over Shopify platform across monthsand years,indicatingthe continued siginificance of Physical stores. However, Shopify's contributionto total sales has been steadily increasing overtime, suggesting an opportunity to grow online sales.
+
 ### 7. What is the percentage of sales by demographic for each year in the dataset?
 
 ```sql
@@ -225,6 +297,12 @@ Output:
 | 2019 | 27.28 | 32.47 | 40.25 |
 | 2020 | 28.72 | 32.73 | 38.55 |
 
+#### Percentage of Sales by Demographic for Each Year
+
+1. **Insight**:
+
+   - Couples consistently contribute the least to total sales across all years, with families and unknown demographics making up the majority.
+
 ### 8. Which age_band and demographic values contribute the most to Retail sales?
 
 ```sql
@@ -246,6 +324,14 @@ Output:
 | Middle Aged | Couples | 1854160330 |
 | Young Adults | Families | 1770889293 |
 
+#### Retail Sales Contribution by Age Band and Demographic
+
+1. **Insight**:
+
+   - The demographic category "Unknown" contributes significantly more to retail sales compared to other age bands and demographics, indicating that a large portion of sales data lacks detailed demographic information.
+   - Among known demographics, retirees, especially those in families, contribute significantly to retail sales, followed by middle-aged customers, primarily in families and couples.
+   - Young adults, both in couples and families, contribute less compared to retirees and middle-aged individuals.
+
 ### 9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?
 
 ```sql
@@ -266,3 +352,10 @@ Output:
 | 2019 | Shopify | 177.56 | 183.36 |
 | 2020 | Retail | 40.64 | 36.56 |
 | 2020 | Shopify | 174.87 | 179.03 |
+
+#### Average Transaction Size Comparison
+
+1. **Insights**:
+
+   - Avg_Transactions_1: Represents the average value of the avg_transaction column directly. This approach yields different results for each platform, reflecting the variability in average transaction sizes within each platform.
+   - Avg_Transactions_2: Calculated by dividing the total sales by the total number of transactions. This method provides a more accurate reflection of the average transaction size, considering the actual sales amounts and transaction counts. It ensures consistency in calculation across platforms, making it a more reliable metric for comparison.
