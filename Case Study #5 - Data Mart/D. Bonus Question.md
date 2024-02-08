@@ -35,6 +35,15 @@ WITH before_and_after_data AS
 ```
 
 Output:
+| Region | Sales Before Baseline Date | Sales After Baseline Date | Difference | Percent Change |
+|---------------|-----------------------------|----------------------------|------------|----------------|
+| AFRICA | 4942976910 | 4997516159 | 54539249 | 1.10 |
+| ASIA | 4613242689 | 4551927271 | -61315418 | -1.33 |
+| CANADA | 1244662705 | 1234025206 | -10637499 | -0.85 |
+| EUROPE | 328141414 | 344420043 | 16278629 | 4.96 |
+| OCEANIA | 6698586333 | 6640244793 | -58341540 | -0.87 |
+| SOUTH AMERICA | 611056923 | 608981392 | -2075531 | -0.34 |
+| USA | 1967554887 | 1960297502 | -7257385 | -0.37 |
 
 -- Sales metric performance across platform.
 
@@ -63,6 +72,10 @@ WITH before_and_after_data AS
 ```
 
 Output:
+| Platform | Sales Before Baseline Date | Sales After Baseline Date | Difference | Percent Change |
+|----------|-----------------------------|----------------------------|-------------|----------------|
+| Retail | 19886040272 | 19768576165 | -117464107 | -0.59 |
+| Shopify | 520181589 | 568836201 | 48654612 | 9.35 |
 
 -- Sales metric performance across age_band.
 
@@ -91,6 +104,45 @@ WITH before_and_after_data AS
 ```
 
 Output:
+| Age Band | Sales Before Baseline Date | Sales After Baseline Date | Difference | Percent Change |
+|--------------|-----------------------------|----------------------------|-------------|----------------|
+| Middle Aged | 3276892347 | 3269748622 | -7143725 | -0.22 |
+| Retirees | 6646865322 | 6634706880 | -12158442 | -0.18 |
+| Unknown | 8191628826 | 8146983408 | -44645418 | -0.55 |
+| Young Adults | 2290835366 | 2285973456 | -4861910 | -0.21 |
+
+-- Sales metric performance across demographic.
+
+```sql
+WITH before_and_after_data AS
+	   (SELECT demographic,
+			week_number,
+			SUM(sales) AS total_sales
+			FROM clean_weekly_sales
+		GROUP BY 1,2
+		ORDER BY 1,2
+	   ),
+	   sales_calculation_table_before_and_after AS (
+	   SELECT demographic,
+			SUM(CASE WHEN week_number < 24 THEN total_sales ELSE 0 END) AS sales_before_baseline_date_value,
+			SUM(CASE WHEN week_number >= 24 THEN total_sales ELSE 0 END) AS sales_after_baseline_date_value
+			FROM before_and_after_data
+			GROUP BY demographic
+			)
+		SELECT demographic,
+			sales_before_baseline_date_value, sales_after_baseline_date_value,
+			(sales_after_baseline_date_value - sales_before_baseline_date_value) AS difference,
+			ROUND(100.0 * (sales_after_baseline_date_value - sales_before_baseline_date_value)/
+				sales_before_baseline_date_value,2) AS pct
+		FROM sales_calculation_table_before_and_after;
+```
+
+Output:
+| Demographic | Sales Before Baseline Date | Sales After Baseline Date | Difference | Percent Change |
+|-------------|----------------------------|---------------------------|-------------|----------------|
+| Couples | 5608866131 | 5592341420 | -16524711 | -0.29 |
+| Families | 6605726904 | 6598087538 | -7639366 | -0.12 |
+| Unknown | 8191628826 | 8146983408 | -44645418 | -0.55 |
 
 -- Sales metric performance across customer_type.
 
@@ -117,3 +169,10 @@ WITH before_and_after_data AS
 				sales_before_baseline_date_value,2) AS pct
 		FROM sales_calculation_table_before_and_after;
 ```
+
+Output:
+| Customer Type | Sales Before Baseline Date | Sales After Baseline Date | Difference | Percent Change |
+|---------------|----------------------------|---------------------------|-------------|----------------|
+| Existing | 10168877642 | 10117367239 | -51510403 | -0.51 |
+| Guest | 7630353739 | 7595150744 | -35202995 | -0.46 |
+| New | 2606990480 | 2624894383 | 17903903 | 0.69 |
