@@ -229,6 +229,14 @@ Output:
 |------------|---------------|-------------------|-------------|---------------------|-----------|-----------|
 | 7 | Lobster | Shellfish | 1547 | 968 | 214 | 754 |
 
+#### Analysis of Product Performance Summary
+
+1. **Insights**:
+
+   - Shellfish Dominance: Both the product with the most views and the product with the most cart adds and purchases belong to the Shellfish category, indicating its popularity among customers.
+   - Lobster Dominance: The product with the most cart adds and purchases is Lobster, suggesting that it is not only popular but also highly sought-after for purchase among customers.
+   - Oyster Engagement: Although Oyster has the most views, it has a relatively lower number of cart adds and purchases compared to Lobster, indicating potential areas for improvement in conversion rate or marketing strategies.
+
 ### 2. Which product was most likely to be abandoned?
 
 ```sql
@@ -241,6 +249,14 @@ Output:
 | product_id | product_name | product_category | view_counts | add_to_cart_counts | abandoned | purchased |
 |------------|---------------|-------------------|-------------|---------------------|-----------|-----------|
 | 4 | Russian Caviar | Luxury | 1563 | 946 | 249 | 697 |
+
+#### Analysis of Product Most Likely to Be Abandoned
+
+1. **Insights**:
+
+   - Luxury Product: Russian Caviar falls under the Luxury category, which may imply a higher price point or more exclusive nature compared to other products.
+   - High Abandonment Rate: The relatively high number of abandonments suggests that customers might have shown interest in the product but ultimately decided not to proceed with the purchase.
+   - Potential Improvements: Analyzing the reasons behind abandonment, such as pricing concerns, shipping costs, or checkout process issues, could provide insights into areas for improvement to reduce abandonment rates and increase conversions. Additionally, targeted marketing or promotional strategies could be employed to encourage customers to complete their purchase of Russian Caviar.
 
 ### 3. Which product had the highest view to purchase percentage?
 
@@ -257,6 +273,14 @@ Output:
 |--------------|-------------------------|
 | Lobster | 48.74 |
 
+#### Analysis of Product with Highest View-to-Purchase Percentage
+
+1. **Insights**:
+
+   - High Conversion Rate: The high purchase-to-view percentage indicates that a significant portion of customers who viewed the Lobster product ultimately made a purchase.
+   - Appealing Product: Lobster seems to be particularly appealing to customers, leading to a relatively high conversion rate compared to other products.
+   - Market Demand: The high conversion rate may suggest strong market demand for Lobster, potentially due to factors such as its taste, quality, or perceived value.
+
 ### 4. What is the average conversion rate from view to cart add?
 
 ```sql
@@ -270,6 +294,12 @@ Output:
 |----------------------|
 | 60.95 |
 
+#### Analysis of Average Conversion Rate from View to Cart Add
+
+1. **Insights**:
+
+   - Conversion Funnel Efficiency: The high average conversion rate indicates that a significant proportion of customers who view products proceed to add them to their cart.
+
 ### 5. What is the average conversion rate from cart add to purchase?
 
 ```sql
@@ -282,3 +312,9 @@ Output:
 | avg_conversion_rate |
 |----------------------|
 | 75.93 |
+
+#### Analysis of Average Conversion Rate from Cart Add to Purchase
+
+1. **Insights**:
+
+   - Conversion Funnel Efficiency: This high average conversion rate indicates that a significant proportion of customers who add products to their cart ultimately proceed to make a purchase.
