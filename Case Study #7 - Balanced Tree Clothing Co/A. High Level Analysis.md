@@ -39,6 +39,12 @@ Output:
 | White Striped Socks - Mens | 3655 |
 | Teal Button Up Shirt - Mens | 3646 |
 
+#### Analysis of Total Quantity Sold for All Products
+
+1. **Insights**:
+
+   - The total quantity sold for all products is 45216 with the Grey Fashion Jacket and Navy Oversized Jeans being the top-selling items.
+
 ### 2. What is the total generated revenue for all products before discounts?
 
 Total revenue before discounts
@@ -80,6 +86,12 @@ Output:
 | Cream Relaxed Jeans - Womens | 37070 |
 | Teal Button Up Shirt - Mens | 36460 |
 
+#### Analysis of Total Revenue Before Discounts
+
+1. **Insights**:
+
+   - The total revenue generated for all products before discounts is $1,289,453.
+
 ### 3. What was the total discount amount for all products?
 
 Total discount given is given by
@@ -120,3 +132,9 @@ Output:
 | Navy Oversized Jeans - Womens | 6135.61 |
 | Cream Relaxed Jeans - Womens | 4463.40 |
 | Teal Button Up Shirt - Mens | 4397.60 |
+
+#### Analysis of Total Discount Amount
+
+1. **Insights**:
+
+   - The total discount amount given across all products is $156,229.14.

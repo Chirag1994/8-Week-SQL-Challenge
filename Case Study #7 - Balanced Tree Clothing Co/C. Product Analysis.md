@@ -17,6 +17,12 @@ Output:
 | Grey Fashion Jacket - Womens | 209304 |
 | White Tee Shirt - Mens | 152000 |
 
+#### Analysis of
+
+1. **Insights**:
+
+   -
+
 ### 2. What is the total quantity, revenue and discount for each segment?
 
 ```sql
@@ -35,6 +41,12 @@ Output:
 | Shirt | 11265 | 406143 | 49594.27 |
 | Socks | 11217 | 307977 | 37013.44 |
 | Jacket | 11385 | 366983 | 44277.46 |
+
+#### Analysis of
+
+1. **Insights**:
+
+   -
 
 ### 3. What is the top selling product for each segment?
 
@@ -72,6 +84,12 @@ Output:
 | Shirt | Blue Polo Shirt - Mens | 3819 |
 | Socks | Navy Solid Socks - Mens | 3792 |
 
+#### Analysis of
+
+1. **Insights**:
+
+   -
+
 ### 4. What is the total quantity, revenue and discount for each category?
 
 ```sql
@@ -90,6 +108,12 @@ Output:
 |---------------|----------------|-------------------------------|-------------|
 | Womens | 22734 | 575333 | 69621.43 |
 | Mens | 22482 | 714120 | 86607.71 |
+
+#### Analysis of
+
+1. **Insights**:
+
+   -
 
 ### 5. What is the top selling product for each category?
 
@@ -126,6 +150,12 @@ Output:
 |---------------|--------------------------------|----------------|
 | Mens | Blue Polo Shirt - Mens | 3819 |
 | Womens | Grey Fashion Jacket - Womens | 3876 |
+
+#### Analysis of
+
+1. **Insights**:
+
+   -
 
 ### 6. What is the percentage split of revenue by product for each segment?
 
@@ -166,6 +196,12 @@ Output:
 | Socks | Pink Fluro Polkadot Socks - Mens | 35.50 |
 | Socks | White Striped Socks - Mens | 20.18 |
 
+#### Analysis of
+
+1. **Insights**:
+
+   -
+
 ### 7. What is the percentage split of revenue by segment for each category?
 
 ```sql
@@ -197,6 +233,12 @@ Output:
 | Womens | Jacket | 63.79 |
 | Womens | Jeans | 36.21 |
 
+#### Analysis of
+
+1. **Insights**:
+
+   -
+
 ### 8. What is the percentage split of total revenue by category?
 
 ```sql
@@ -222,6 +264,12 @@ Output:
 |---------------|-------------|
 | Mens | 55.38 |
 | Womens | 44.62 |
+
+#### Analysis of
+
+1. **Insights**:
+
+   -
 
 ### 9. What is the total transaction “penetration” for each product? (hint: penetration = number of transactions where at least 1 quantity of a product was purchased divided by total number of transactions)
 
@@ -261,6 +309,12 @@ Output:
 | White Striped Socks - Mens | 49.72 |
 | Teal Button Up Shirt - Mens | 49.68 |
 
+#### Analysis of
+
+1. **Insights**:
+
+   -
+
 ### 10. What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
 
 ```sql
@@ -294,3 +348,9 @@ Output:
 | 2a2353,2feb6b,c4a632 | Blue Polo Shirt - Mens, Pink Fluro Polkadot Socks - Mens, Navy Oversized Jeans - Womens |
 | 5d267b,c4a632,e83aa3 | White Tee Shirt - Mens, Navy Oversized Jeans - Womens, Black Straight Jeans - Womens |
 | c4a632,c8d436,e83aa3 | Navy Oversized Jeans - Womens, Teal Button Up Shirt - Mens, Black Straight Jeans - Womens |
+
+#### Analysis of
+
+1. **Insights**:
+
+   -
